@@ -19,6 +19,17 @@
 
 package com.iceybones.capstone.dl4j;
 
+import static org.nd4j.linalg.indexing.NDArrayIndex.all;
+import static org.nd4j.linalg.indexing.NDArrayIndex.point;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
@@ -29,18 +40,6 @@ import org.nd4j.linalg.dataset.api.DataSetPreProcessor;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.INDArrayIndex;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-import static org.nd4j.linalg.indexing.NDArrayIndex.all;
-import static org.nd4j.linalg.indexing.NDArrayIndex.point;
 
 /**-
  * This is a DataSetIterator that is specialized for the News headlines dataset used in the TrainNews example
@@ -122,7 +121,7 @@ public class NewsIterator implements DataSetIterator {
 
         for (int i = 0; i < num && cursor < this.totalNews; i++) {
             if (currCategory < categoryData.size()) {
-//                if (this.categoryData.get(currCategory).getValue().size() > newsPosition)
+                if (this.categoryData.get(currCategory).getValue().size() > newsPosition)
                     news.add(this.categoryData.get(currCategory).getValue().get(newsPosition));
                 category[i] = Integer.parseInt(this.categoryData.get(currCategory).getKey().split(",")[0]);
                 currCategory++;

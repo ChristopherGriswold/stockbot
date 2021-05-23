@@ -44,10 +44,8 @@ public class PrepareWordVector {
 
     public static void main(String[] args) throws Exception {
 
-//        dataLocalPath = DownloaderUtility.NEWSDATA.Download();
-        dataLocalPath = "";
         // Gets Path to Text file
-        String filePath = new File(dataLocalPath, "/home/chris/IdeaProjects/capstone/stocks/news/newsRaw.txt").getAbsolutePath();
+        String filePath = new File("stocks/news/labeled_news/all_news.txt").getAbsolutePath();
 
         log.info("Load & Vectorize Sentences....");
         // Strip white space before and after for each line
@@ -78,6 +76,6 @@ public class PrepareWordVector {
 
         // Write word vectors to file
         //noinspection unchecked
-        WordVectorSerializer.writeWord2VecModel(vec, new File(dataLocalPath, "/home/chris/IdeaProjects/capstone/stocks/news/newsVector.txt").getAbsolutePath());
+        WordVectorSerializer.writeWord2VecModel(vec, new File("stocks/news/newsVector.txt").getAbsolutePath());
     }
 }

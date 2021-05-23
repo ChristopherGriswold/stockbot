@@ -17,6 +17,12 @@
 
 package com.iceybones.capstone.dl4j;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Collections;
+import java.util.stream.Collectors;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.nn.conf.GradientNormalization;
@@ -37,13 +43,6 @@ import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.learning.config.RmsProp;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.util.Collections;
-import java.util.stream.Collectors;
-
 /**
  * This program trains a RNN to predict category of a news headlines.
  * It uses word vector generated from PrepareWordVector.java so please make sure to run that first.
@@ -63,15 +62,13 @@ public class TrainNews {
     public static WordVectors wordVectors;
 
     public static void main(String[] args) throws Exception {
-        String hilo = "High";
-//        String dataLocalPath = DownloaderUtility.NEWSDATA.Download();
         String dataLocalPath = "/home/chris/IdeaProjects/capstone/stocks/news/";
-        DATA_PATH = new File(dataLocalPath,"LabelledNews" + hilo).getAbsolutePath();
+        DATA_PATH = new File(dataLocalPath,"labeled_news").getAbsolutePath();
 
         int batchSize = 500;     //Number of examples in each minibatch
-        int nEpochs = 10;        //Number of epochs (full passes of training data) to train on
+        int nEpochs = 5;        //Number of epochs (full passes of training data) to train on
         int truncateReviewsToLength = 300;  //Truncate reviews with length (# words) greater than this
-        int testSize = 23000; //Number of lines to test
+        int testSize = 6200; //6200 Max
 
         for (int i = 0; i< 3; i++) {
             try(var trainOut = Files.newBufferedWriter(Path.of(DATA_PATH + "/train/" + i + ".txt")
@@ -117,7 +114,6 @@ public class TrainNews {
             .truncateLength(truncateReviewsToLength)
             .train(false)
             .build();
-
         //DataSetIterator train = new AsyncDataSetIterator(iTrain,1);
         //DataSetIterator test = new AsyncDataSetIterator(iTest,1);
 
@@ -150,8 +146,8 @@ public class TrainNews {
         Evaluation eval = net.evaluate(iTest);
         System.out.println(eval.stats());
 
-        net.save(new File(dataLocalPath,"NewsModel" + hilo + ".net"), true);
-        System.out.println("----- Example complete -----");
+        net.save(new File(dataLocalPath,"news_model.net"), true);
+        System.out.println("----- Training complete -----");
     }
 
 }

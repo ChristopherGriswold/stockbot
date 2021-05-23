@@ -46,15 +46,13 @@ public class TestNews {
 
   private static WordVectors wordVectors;
   private static TokenizerFactory tokenizerFactory;
-  private static final String dataLocalPath = "/home/chris/IdeaProjects/capstone/stocks/news/";
+  private static final String dataLocalPath = "stocks/news/";
   public static Map<String, String> verdicts = new HashMap<>();
-  public static MultiLayerNetwork highNet;
-  public static MultiLayerNetwork lowNet;
+  public static MultiLayerNetwork net;
 
   static {
     try {
-      highNet = MultiLayerNetwork.load(new File(dataLocalPath, "NewsModelHigh" + ".net"), true);
-      lowNet = MultiLayerNetwork.load(new File(dataLocalPath, "NewsModelLow" + ".net"), true);
+      net = MultiLayerNetwork.load(new File(dataLocalPath, "news_model.net"), true);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -64,51 +62,34 @@ public class TestNews {
     String news = CleanNews.cleanLine(rawNews, symbol);
     DataSet testNews = prepareTestData(news);
     INDArray fet = testNews.getFeatures();
-    INDArray highPredicted = highNet.output(fet, false);
-    INDArray lowPredicted = lowNet.output(fet, false);
-    long[] highArrsiz = highPredicted.shape();
-    long[] lowArrsiz = lowPredicted.shape();
+    INDArray predicted = net.output(fet, false);
+    long[] arrsiz = predicted.shape();
 
-    Path highCategories = Path.of(dataLocalPath, "LabelledNewsHigh/categories.txt");
-    Path lowCategories = Path.of(dataLocalPath, "LabelledNewsLow/categories.txt");
+    Path categories = Path.of(dataLocalPath, "labeled_news/categories.txt");
 
-    double highMax = 0;
-    int highPos = 0;
-    for (int i = 0; i < highArrsiz[1]; i++) {
-      if (highMax < (double) highPredicted.slice(0).getRow(i).sumNumber()) {
-        highMax = (double) highPredicted.slice(0).getRow(i).sumNumber();
-        highPos = i;
-      }
-    }
-    double lowMax = 0;
-    int lowPos = 0;
-    for (int i = 0; i < lowArrsiz[1]; i++) {
-      if (lowMax < (double) lowPredicted.slice(0).getRow(i).sumNumber()) {
-        lowMax = (double) lowPredicted.slice(0).getRow(i).sumNumber();
-        lowPos = i;
+    double max = 0;
+    int pos = 0;
+    for (int i = 0; i < arrsiz[1]; i++) {
+      if (max < (double) predicted.slice(0).getRow(i).sumNumber()) {
+        max = (double) predicted.slice(0).getRow(i).sumNumber();
+        pos = i;
       }
     }
 
-    try (var highBrCategories = Files.newBufferedReader(highCategories);
-        var lowBrCategories = Files.newBufferedReader(lowCategories)) {
+    try (var cats = Files.newBufferedReader(categories)) {
       String temp;
-      List<String> highLabels = new ArrayList<>();
-      List<String> lowLabels = new ArrayList<>();
-      while ((temp = highBrCategories.readLine()) != null) {
-        highLabels.add(temp);
+      List<String> labels = new ArrayList<>();
+      while ((temp = cats.readLine()) != null) {
+        labels.add(temp);
       }
-      while ((temp = lowBrCategories.readLine()) != null) {
-        lowLabels.add(temp);
-      }
-      String highLabel = highLabels.get(highPos).split(",")[1];
-      String lowLabel = lowLabels.get(lowPos).split(",")[1];
-      verdicts.put(symbol, highLabel + "," + lowLabel + "," + symbol + "," + rawNews);
+      String label = labels.get(pos).split(",")[1];
+      verdicts.put(symbol, label + "," + symbol + "," + rawNews);
     } catch (Exception e) {
       System.out.println("File Exception : " + e.getMessage());
     }
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main() throws Exception {
     if (!Files.exists(Path.of("bought.csv"))) {
       Files.createFile(Path.of("bought.csv"));
     }
@@ -146,8 +127,6 @@ public class TestNews {
         out.newLine();
       }
     }
-    System.out.println("Done scanning");
-    System.exit(0);
   }
 
   // One news story gets transformed into a dataset with one element.
