@@ -6,9 +6,14 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -76,7 +81,7 @@
       </SplitPane>
    </right>
    <center>
-      <SplitPane dividerPositions="0.6330014224751067, 0.8193456614509246" orientation="VERTICAL" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.3883357041251778, 0.44950213371266" orientation="VERTICAL" BorderPane.alignment="CENTER">
          <items>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
@@ -130,7 +135,7 @@
                         </ToggleButton>
                         <ToggleButton fx:id="sellBtn" mnemonicParsing="false" onAction="#onActionSellBtn" text="Sell" toggleGroup="$buySellGroup" />
                         <TextField fx:id="quantityField" onKeyTyped="#onKeyTypedQuantityField" promptText="Quantity" />
-                        <Label fx:id="estimatedPriceLbl" maxWidth="200.0" text="jhkjhjhkjhjkj dskf jaslkdjfksdj fkaj dfkjalk sdfkjads fkajdsk fkal dsfj aksd flja ksdjkf as" wrapText="true" HBox.hgrow="NEVER" />
+                        <Label fx:id="estimatedPriceLbl" maxWidth="200.0" text="Estimated Price: $0.00" wrapText="true" HBox.hgrow="NEVER" />
                      </children>
                      <VBox.margin>
                         <Insets bottom="8.0" />
@@ -173,7 +178,7 @@
             </VBox>
             <VBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT">
                <children>
-                  <Label text="News">
+                  <Label text="Automation">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -184,28 +189,123 @@
                         <Insets bottom="8.0" top="8.0" />
                      </padding>
                   </Label>
-                  <VBox minHeight="0.0" VBox.vgrow="ALWAYS">
-                     <children>
-                        <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0" VBox.vgrow="ALWAYS">
+                  <TabPane side="LEFT" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                     <Tab text="Operation">
+                        <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="16.0" prefHeight="345.0" prefWidth="38.0">
                            <children>
-                              <ToggleButton fx:id="scanBtn" mnemonicParsing="false" onAction="#onActionScanBtn" text="Scan" />
-                              <Button fx:id="testBtn" mnemonicParsing="false" onAction="#onActionTestBtn" text="Test" />
-                              <CheckBox fx:id="autoAddCheck" mnemonicParsing="false" onAction="#onActionAutoAddCheck" text="Auto-Add" />
-                              <CheckBox fx:id="autoBuyCheck" mnemonicParsing="false" onAction="#onActionOnActionBuyCheck" text="Auto-Buy" />
-                              <CheckBox fx:id="autoSellCheck" mnemonicParsing="false" onAction="#onActionAutoSellCheck" text="Auto-Sell" />
-                              <TextField fx:id="maxBidTxt" onAction="#onActionMaxBidTxt" prefWidth="100.0" promptText="Max Bid" />
-                              <TextField fx:id="sellLagTxt" onAction="#onActionSellLagTxt" prefWidth="100.0" promptText="Sell Lag" />
+                              <Separator prefWidth="200.0" />
+                              <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0">
+                                 <children>
+                                    <TextField fx:id="maxBuyTxt" promptText="Max Buy" />
+                                    <TextField fx:id="maxDailyTxt" promptText="Max Daily" />
+                                    <TextField fx:id="sellPercentTxt" promptText="Sell %" />
+                                    <TextField fx:id="sellStrongPercentTxt" promptText="Sell Strong %" />
+                                    <ToggleButton fx:id="scanBtn" minWidth="50.0" mnemonicParsing="false" onAction="#onActionScanBtn" text="Scan" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="8.0" right="8.0" top="8.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <CheckBox fx:id="autoWatchCheck" mnemonicParsing="false" onAction="#onActionWatchCheck" selected="true" text="Auto-Watch" />
+                                    <CheckBox fx:id="autoBuyCheck" mnemonicParsing="false" onAction="#OnActionBuyCheck" text="Auto-Buy" />
+                                    <CheckBox fx:id="autoSellCheck" mnemonicParsing="false" onAction="#onActionSellCheck" text="Auto-Sell" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                 </padding>
+                              </HBox>
+                              <ListView fx:id="newsParent" prefHeight="281.0" prefWidth="480.0" VBox.vgrow="ALWAYS" />
                            </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="8.0" />
-                           </padding>
-                        </HBox>
-                        <ListView fx:id="newsParent" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
+                        </VBox>
+                     </Tab>
+                     <Tab text="Testing">
+                        <SplitPane dividerPositions="0.5">
+                           <items>
+                              <ListView fx:id="testNewsParent" prefHeight="347.0" prefWidth="628.0" />
+                              <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="16.0">
+                                 <children>
+                                    <Separator prefWidth="200.0" />
+                                    <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="buyPercentTxt" onKeyReleased="#onKeyReleasedClassify" promptText="Buy %" />
+                                                <TextField fx:id="buyStrongPercentTxt" onKeyReleased="#onKeyReleasedClassify" promptText="Buy Strong %" />
+                                                <Button fx:id="classifyBtn" disable="true" minWidth="69.0" mnemonicParsing="false" onAction="#onActionClassifyBtn" text="Classify" />
+                                                <ProgressIndicator fx:id="classifyIndicator" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" visible="false" />
+                                             </children>
+                                          </VBox>
+                                          <VBox spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="minibatchTxt" onKeyReleased="#onKeyReleasedTrain" promptText="Minibatch" />
+                                                <TextField fx:id="epochTxt" onKeyReleased="#onKeyReleasedTrain" promptText="Epoch" />
+                                                <TextField fx:id="testSizeTxt" onKeyReleased="#onKeyReleasedTrain" promptText="Test Size" />
+                                                <HBox spacing="16.0">
+                                                   <children>
+                                                      <Button fx:id="trainBtn" disable="true" minWidth="60.0" mnemonicParsing="false" onAction="#onActionTrainBtn" text="Train" />
+                                                      <ProgressIndicator fx:id="trainIndicator" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" visible="false" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <Separator prefWidth="200.0" />
+                                    <Separator prefWidth="200.0" />
+                                    <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <VBox spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="maxBuyTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Max Buy" />
+                                                <TextField fx:id="maxDailyTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Max Daily" />
+                                             </children>
+                                          </VBox>
+                                          <VBox spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="sellPercentTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Sell %" />
+                                                <TextField fx:id="sellStrongPercentTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Sell Strong %" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </HBox>
+                                    <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0">
+                                             <children>
+                                                <DatePicker fx:id="testStartDatePicker" editable="false" onAction="#onActionDatePickerBacktest" promptText="Start" />
+                                                <DatePicker fx:id="testEndDatePicker" editable="false" onAction="#onActionDatePickerBacktest" promptText="End" />
+                                                <Button fx:id="backtestBtn" disable="true" minWidth="75.0" mnemonicParsing="false" onAction="#onActionBacktestBtn" text="Backtest" />
+                                                <ProgressIndicator fx:id="backTestIndicator" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="32.0" visible="false" HBox.hgrow="NEVER" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="8.0" left="8.0" right="8.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </items>
+                        </SplitPane>
+                     </Tab>
+                  </TabPane>
                </children>
             </VBox>
          </items>

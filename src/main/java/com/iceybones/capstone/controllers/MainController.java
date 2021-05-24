@@ -2,7 +2,9 @@ package com.iceybones.capstone.controllers;
 
 import com.iceybones.capstone.CleanNews;
 import com.iceybones.capstone.ScrapeNews;
+import com.iceybones.capstone.dl4j.PrepareNews;
 import com.iceybones.capstone.dl4j.TestNews;
+import com.iceybones.capstone.dl4j.TrainNews;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -25,6 +27,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -40,9 +43,11 @@ import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -109,12 +114,19 @@ public class MainController implements Initializable {
     tickerSymbolCbox.setOnHiding(e -> {
       onActionTicker();
     });
-    runClock();
-    updateCash();
-    setupPortfolioTable();
-    setupOrdersTable();
-    setupWatchlistTable();
+//    runClock();
+//    updateCash();
+//    setupPortfolioTable();
+//    setupOrdersTable();
+//    setupWatchlistTable();
 //    setupLineChart("AAPL");
+    testNewsParent.getItems().add(
+        "Directions: If no classification is on file, enter a Buy % and a Buy Strong % and click Classify.");
+    testNewsParent.getItems().add(
+        "Buy % is a measure of the lowest projected increase to a stock that will cause it to be considered a good buy.");
+    testNewsParent.getItems().add(
+        "Likewise, Buy Strong % is a determination as to what projected increase would be considered a great buy.");
+    testNewsParent.getItems().add("Example: Buy % = 5 and Buy Strong % = 10");
     tickerSymbolCbox.setCellFactory(new Callback<ListView<Asset>, ListCell<Asset>>() {
       @Override
       public ListCell<Asset> call(ListView<Asset> param) {
@@ -155,9 +167,8 @@ public class MainController implements Initializable {
         return out;
       }
     });
-    DecimalFormat format = new DecimalFormat("#.0");
-
-    quantityField.setTextFormatter(new TextFormatter<>(c ->
+    var format = new DecimalFormat("#.0");
+    UnaryOperator<TextFormatter.Change> decimalOnly = (TextFormatter.Change c) ->
     {
       if (c.getControlNewText().isEmpty()) {
         return c;
@@ -171,7 +182,23 @@ public class MainController implements Initializable {
       } else {
         return c;
       }
-    }));
+    };
+
+    quantityField.setTextFormatter(new TextFormatter<>(decimalOnly));
+    buyPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    buyStrongPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    sellPercentTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    sellStrongPercentTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxDailyTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxBuyTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxBuyTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxDailyTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    sellPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    sellStrongPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    minibatchTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    epochTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    testSizeTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+
   }
 
   private void runClock() {
@@ -413,7 +440,6 @@ public class MainController implements Initializable {
     }
 
     try {
-      // Listen to TSLA quotes, trades, and minute bars and print their messages out
       MarketDataListener listener = new MarketDataListenerAdapter(
           symbol,
           MarketDataMessageType.TRADE,
@@ -442,11 +468,6 @@ public class MainController implements Initializable {
           }
         }
       };
-
-      // Add the 'MarketDataListener'
-      // Note that when the first 'MarketDataListener' is added, the Websocket
-      // connection is created.
-//      alpacaAPI.removeMarketDataStreamListener(listener);
       alpacaAPI.addMarketDataStreamListener(listener);
     } catch (WebsocketException exception) {
       exception.printStackTrace();
@@ -460,7 +481,8 @@ public class MainController implements Initializable {
     ((NumberAxis) areaChart.getYAxis()).setTickLabelFormatter(new StringConverter<Number>() {
       @Override
       public String toString(Number number) {
-        return "$" + number;
+        DecimalFormat df = new DecimalFormat("#.00");
+        return "$" + df.format(number);
       }
 
       @Override
@@ -659,15 +681,17 @@ public class MainController implements Initializable {
   void onKeyReleasedTickerSymbolCbox(KeyEvent event) {
     if (!tickerSymbolCbox.getSelectionModel().isEmpty()) {
       tickerSymbolCbox.show();
-//      return;
     }
     if (event.getCode().isArrowKey()) {
       return;
     }
+//    if (event.getCode() == KeyCode.BACK_SPACE) {
+//      tickerSymbolCbox.hide();
+//      tickerSymbolCbox.show();
+//    }
     if (event.getCode() == KeyCode.ENTER) {
       onActionTicker();
     }
-    tickerSymbolCbox.setVisibleRowCount(10);
     List<Asset> filtered = usEquities.stream()
         .filter((a) -> a.getSymbol().toLowerCase()
             .contains(tickerSymbolCbox.getEditor().getText().toLowerCase()) || a.getName()
@@ -722,6 +746,115 @@ public class MainController implements Initializable {
     submitBtn.setDisable(
         (!buyBtn.isSelected() && !sellBtn.isSelected()) || quantityField.getText().isEmpty()
             || tickerSymbolCbox.getSelectionModel().getSelectedItem() == null);
+  }
+
+  private void checkClassify() {
+    classifyBtn
+        .setDisable(buyPercentTxt.getText().isEmpty() || buyStrongPercentTxt.getText().isEmpty());
+  }
+
+  private void checkTrain() {
+    trainBtn.setDisable(
+        minibatchTxt.getText().isEmpty() || epochTxt.getText().isEmpty() || testSizeTxt.getText()
+            .isEmpty());
+  }
+
+  private void checkBacktest() {
+    backtestBtn
+        .setDisable(maxDailyTestTxt.getText().isEmpty() || maxDailyTestTxt.getText().isEmpty()
+            || sellPercentTestTxt.getText().isEmpty() || sellStrongPercentTestTxt.getText()
+            .isEmpty()
+            || testStartDatePicker.getValue() == null || testEndDatePicker.getValue() == null);
+  }
+
+  @FXML
+  void onKeyReleasedClassify() {
+    checkClassify();
+  }
+
+  @FXML
+  void onKeyReleasedTrain() {
+    checkTrain();
+  }
+
+  @FXML
+  void onKeyReleasedBacktest() {
+    checkBacktest();
+  }
+
+  @FXML
+  void onActionDatePickerBacktest(ActionEvent event) {
+    checkBacktest();
+  }
+
+
+  @FXML
+  void OnActionBuyCheck(ActionEvent event) {
+
+  }
+
+  @FXML
+  void onActionBacktestBtn(ActionEvent event) {
+
+  }
+
+  @FXML
+  void onActionSellCheck(ActionEvent event) {
+
+  }
+
+  @FXML
+  void onActionClassifyBtn(ActionEvent event) {
+    testNewsParent.getItems().add("Performing Classification");
+    classifyBtn.setDisable(true);
+    classifyIndicator.setVisible(true);
+    Executors.newSingleThreadExecutor().submit(() -> {
+      int minLines = PrepareNews.classify(Double.parseDouble(buyPercentTxt.getText()) / 100 + 1,
+          Double.parseDouble(buyStrongPercentTxt.getText()) / 100 + 1);
+      Platform.runLater(() -> {
+        testNewsParent.getItems().add("Classification Complete");
+        testNewsParent.getItems().add("Buy @ " + buyPercentTxt.getText() + "%");
+        testNewsParent.getItems().add("Buy Strong @ " + buyStrongPercentTxt.getText() + "%");
+        testNewsParent.getItems().add("Max test size: " + minLines);
+        testNewsParent.getItems()
+            .addAll("Training: You must now train your model on the classified data.",
+                "Enter a Minibatch size, an Epoch number and a Test Size.",
+                "Minibatch size is the number of data elements that will be analyzed during each iteration.",
+                "A minibatch size of 50 is a good place to start.",
+                "If your test size is very large increasing this number can speed up the training process.",
+                "Using a minibatch size that is too small or too large will adversely affect training performance.",
+                "The number of Epochs is the amount of full learning cycles that will be performed on the entire data set.",
+                "It is recommended to keep this in the range of 3-10 to avoid under or overfitting the data set.",
+                "The bigger the Test Size the better but larger Test Sizes will require more time to compute.");
+        testSizeTxt.setText(Integer.toString(minLines));
+        buyPercentTxt.clear();
+        buyStrongPercentTxt.clear();
+        classifyIndicator.setVisible(false);
+      });
+    });
+  }
+
+  @FXML
+  void onActionTrainBtn(ActionEvent event) {
+    trainBtn.setDisable(true);
+    trainIndicator.setVisible(true);
+    Executors.newSingleThreadExecutor().submit(() -> {
+      TrainNews.train((int) Double.parseDouble(minibatchTxt.getText()),
+          (int) Double.parseDouble(epochTxt.getText()),
+          (int) Double.parseDouble(testSizeTxt.getText()), testNewsParent);
+      Platform.runLater(() -> {
+        trainIndicator.setVisible(false);
+        testNewsParent.getItems().add("You now have a trained model on file and are free to backtest and use operational functions.");
+      });
+    });
+    minibatchTxt.clear();
+    epochTxt.clear();
+    testSizeTxt.clear();
+  }
+
+  @FXML
+  void onActionWatchCheck(ActionEvent event) {
+
   }
 
   @FXML
@@ -850,5 +983,74 @@ public class MainController implements Initializable {
 
   @FXML
   private Label estimatedPriceLbl;
+
+  @FXML
+  private TextField maxBuyTxt;
+
+  @FXML
+  private TextField maxDailyTxt;
+
+  @FXML
+  private TextField sellPercentTxt;
+
+  @FXML
+  private TextField sellStrongPercentTxt;
+
+  @FXML
+  private CheckBox autoWatchCheck;
+
+  @FXML
+  private TextField buyPercentTxt;
+
+  @FXML
+  private TextField buyStrongPercentTxt;
+
+  @FXML
+  private Button classifyBtn;
+
+  @FXML
+  private TextField minibatchTxt;
+
+  @FXML
+  private TextField epochTxt;
+
+  @FXML
+  private TextField testSizeTxt;
+
+  @FXML
+  private Button trainBtn;
+
+  @FXML
+  private TextField maxBuyTestTxt;
+
+  @FXML
+  private TextField maxDailyTestTxt;
+
+  @FXML
+  private TextField sellPercentTestTxt;
+
+  @FXML
+  private TextField sellStrongPercentTestTxt;
+
+  @FXML
+  private DatePicker testStartDatePicker;
+
+  @FXML
+  private DatePicker testEndDatePicker;
+
+  @FXML
+  private Button backtestBtn;
+
+  @FXML
+  private ListView<String> testNewsParent;
+
+  @FXML
+  private ProgressIndicator classifyIndicator;
+
+  @FXML
+  private ProgressIndicator trainIndicator;
+
+  @FXML
+  private ProgressIndicator backtestIndicator;
 
 }

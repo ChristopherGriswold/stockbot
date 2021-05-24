@@ -12,11 +12,12 @@ import java.util.Set;
 
 public class PrepareNews {
 
-  public static void main(String[] args) {
+  public static int classify(double buy, double strongBuy) {
     Map<Integer, Set<String>> newsMap = new HashMap<>();
     newsMap.put(0, new HashSet<>());
     newsMap.put(1, new HashSet<>());
     newsMap.put(2, new HashSet<>());
+    int minLines = 0;
     try (var allIn = Files
         .newBufferedReader(Path.of("stocks/news/news_rua2.csv"));
         var allOut = Files
@@ -28,25 +29,14 @@ public class PrepareNews {
         var ignoreOut = Files
             .newBufferedWriter(Path.of("stocks/news/labeled_news/train/0_all.txt"));
     ) {
-//      var lines = allIn.lines().skip(1).sorted(Comparator.comparingDouble(
-//          a -> Double.parseDouble(a.split(",")[2]) / Double.parseDouble(a.split(",")[4]))).collect(
-//          Collectors.toList());
-//      lines.stream().limit(10000).forEach(a -> newsMap.get(2).add(a.split(",")[5]));
-//      lines.stream().skip(10000).limit(10000).forEach(a -> newsMap.get(1).add(a.split(",")[5]));
-//      Collections.reverse(lines);
-//      lines.stream().limit(10000).forEach(a -> newsMap.get(0).add(a.split(",")[5]));
       String line = allIn.readLine();
-      int counter = 1;
       while ((line = allIn.readLine()) != null) {
         var lines = line.split(",");
-        if (Double.parseDouble(lines[2]) / Double.parseDouble(lines[4]) >= 1.1) {
+        if (Double.parseDouble(lines[2]) / Double.parseDouble(lines[4]) >= strongBuy) {
           newsMap.get(2).add(lines[5]);
-        } else if (Double.parseDouble(lines[2]) / Double.parseDouble(lines[4]) >= 1.05) {
+        } else if (Double.parseDouble(lines[2]) / Double.parseDouble(lines[4]) >= buy) {
           newsMap.get(1).add(lines[5]);
         }
-//        else if (Double.parseDouble(lines[2]) / Double.parseDouble(lines[4]) <= 1) {
-//          newsMap.get(0).add(lines[5]);
-//        }
         else {
           newsMap.get(0).add(lines[5]);
         }
@@ -82,9 +72,11 @@ public class PrepareNews {
         allOut.append(news);
         allOut.newLine();
       }
+      minLines = Math.min(newsMap.get(0).size(), Math.min(tempBuy.size(), tempStrongBuy.size()));
     } catch (IOException e) {
       e.printStackTrace();
     }
+    return minLines;
   }
 
 }

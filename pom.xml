@@ -69,7 +69,7 @@
         <shadedClassifier>bin</shadedClassifier>
         <dl4j-master.version>1.0.0-beta7</dl4j-master.version>
         <logback.version>1.2.3</logback.version>
-        <java.version>1.8</java.version>
+        <java.version>16</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -90,6 +90,12 @@
             <groupId>org.deeplearning4j</groupId>
             <artifactId>deeplearning4j-nlp</artifactId>
             <version>${dl4j-master.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.deeplearning4j</groupId>
+            <artifactId>deeplearning4j-parallel-wrapper</artifactId>
+            <version>1.0.0-beta7</version>
         </dependency>
 
         <!--
