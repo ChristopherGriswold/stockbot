@@ -1,10 +1,10 @@
 package com.iceybones.capstone;
+import com.iceybones.capstone.controllers.MainController;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CleanNews {
@@ -13,20 +13,20 @@ public class CleanNews {
 //            List.of("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
 //            "January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
 //            "November", "December");
-    public static Map<String, String> nameSymbols;
+//    public static Map<String, String> nameSymbols;
 
-    static {
-        try {
-            nameSymbols = Files.newBufferedReader(Path.of("stocks/nasdaq/symbols.csv")).lines()
-                    .collect(Collectors.toMap((a) -> a.split(",")[0], (b) -> b.split(",")[1]));
-            var nyse = Files.newBufferedReader(Path.of("stocks/nyse/symbols.csv")).lines()
-                    .collect(Collectors.toMap((a) -> a.split(",")[0], (b) -> b.split(",")[1]));
-            nameSymbols.putAll(nyse);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    static {
+//        try {
+//            nameSymbols = Files.newBufferedReader(Path.of("stocks/nasdaq/symbols.csv")).lines()
+//                    .collect(Collectors.toMap((a) -> a.split(",")[0], (b) -> b.split(",")[1]));
+//            var nyse = Files.newBufferedReader(Path.of("stocks/nyse/symbols.csv")).lines()
+//                    .collect(Collectors.toMap((a) -> a.split(",")[0], (b) -> b.split(",")[1]));
+//            nameSymbols.putAll(nyse);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public static void main(String[] args) throws IOException {
         try (var newsIn = Files.newBufferedReader(news)) {
@@ -37,23 +37,23 @@ public class CleanNews {
 
     private static String cleanLine(String line) {
         String symbol = line.substring(line.lastIndexOf(",") + 1);
-        if (!nameSymbols.containsKey(symbol) || line.lastIndexOf(",") < 27) {
+        if (line.lastIndexOf(",") < 27) {
             return null;
         }
         String date = line.substring(line.lastIndexOf(",") - 25, line.lastIndexOf(","));
 //        line = line.replace(symbol, "");
         System.out.println(line);
-        line = line.replace(nameSymbols.get(symbol), "");
+        line = line.replace(MainController.usEquities.get(symbol).getName(), "");
         line = line.toLowerCase().replaceAll("[0123456789.,'\"!@#$%^&*â„;()¢/:+=_®~`?’><—-]", "");
         line = line.trim().replaceAll(" +", " ");
         return date + "," + symbol + "," + line;
     }
     public static String cleanLine(String line, String symbol) {
 //        line = line.replace(symbol, "");
-        if(!nameSymbols.containsKey(symbol)) {
+        if(!MainController.usEquities.containsKey(symbol)) {
             return null;
         }
-        line = line.replace(nameSymbols.get(symbol), "");
+        line = line.replace(MainController.usEquities.get(symbol).getName(), "");
         line = line.toLowerCase().replaceAll("[0123456789.,'\"!@#$%^&*â„;()¢/:+=_®~`?’><—-]", "");
         line = line.trim().replaceAll(" +", " ");
         return line;

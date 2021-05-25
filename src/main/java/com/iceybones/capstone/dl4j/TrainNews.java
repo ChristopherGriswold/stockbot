@@ -17,6 +17,7 @@
 
 package com.iceybones.capstone.dl4j;
 
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -183,6 +184,7 @@ public class TrainNews {
       var eval = net.evaluate(iTest);
       Platform.runLater(() -> newsParent.getItems().addAll(eval.stats().split("\n")));
       iTrain.reset();
+      Toolkit.getDefaultToolkit().beep();
     }
 
 //    wrapper.fit(iTrain);

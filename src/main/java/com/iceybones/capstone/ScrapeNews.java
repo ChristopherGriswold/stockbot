@@ -1,5 +1,6 @@
 package com.iceybones.capstone;
 
+import com.iceybones.capstone.controllers.MainController;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -20,53 +21,55 @@ import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 public class ScrapeNews {
 
-  public static Map<String, String> nameSymbols;
+//  public static Map<String, String> nameSymbols = new HashMap<>();
   static Path feedPath = Path.of("stocks/news/feed.csv");
   static Path symbolPath = Path.of("stocks/symbols.csv");
-  static List<String> symbols;
+//  static List<String> symbols;
   int counter = 0;
   static Map<String, String> feedBucket = new HashMap<>();
-  static ExecutorService service = Executors
+  public static ExecutorService service = Executors
       .newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-  static {
-    try {
-      symbols = Files.newBufferedReader(symbolPath).lines()
-          .map((a) -> a.substring(0, a.indexOf(",")))
-          .collect(Collectors.toList());
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
+//  static {
+//    try {
+//      symbols = Files.newBufferedReader(symbolPath).lines()
+//          .map((a) -> a.substring(0, a.indexOf(",")))
+//          .collect(Collectors.toList());
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
-  static {
-    try {
-      nameSymbols = Files.newBufferedReader(Path.of("stocks/symbols.csv")).lines()
-          .collect(Collectors.toMap((a) -> a.split(",")[0], (b) -> b.split(",")[1]));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
+//  static {
+//    try {
+//      nameSymbols = Files.newBufferedReader(Path.of("stocks/symbols.csv")).lines()
+//          .collect(Collectors.toMap((a) -> a.split(",")[0], (b) -> b.split(",")[1]));
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
   public void cancelScan() {
     service.shutdownNow();
     counter = 0;
-//    dumpFeed();
   }
 
-  public ObservableList<String> scan() throws IOException, InterruptedException {
+  public ObservableList<String> scan(ListView<String> newsParent, List<String> symbols, MainController mainController) throws IOException, InterruptedException {
+    int total = MainController.usEquities.size();
+
     if (service.isTerminated()) {
       service = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
     ObservableList<String> newsList = FXCollections.observableArrayList();
-    System.out.println("Setting up.");
-    counter = 0;
+    Platform.runLater(() -> newsParent.getItems().add("Gathering today's headlines. This may take a while."));
+    counter = 1;
     if (!Files.exists(feedPath)) {
       Files.createFile(feedPath);
     }
@@ -76,28 +79,25 @@ public class ScrapeNews {
           .toMap((a) -> a.split(",")[0], (b) -> b.substring(b.indexOf(",") + 1)));
 //            Collections.shuffle(symbols);
     }
-    System.out.println("Data Loaded. Starting Scan.");
     for (var s : symbols) {
 //            Thread.sleep(200);
       service.submit(() -> {
         try {
-          String news = getNews(s);
+          String news = getNews(s, newsParent);
           if (news != null) {
-            Platform.runLater(() -> newsList.add(news));
+            Platform.runLater(() -> newsParent.getItems().add(counter + "/" + total + ": " + news));
+//            Platform.runLater(() -> newsList.add(news));
           }
-          counter++;
         } catch (IOException e) {
           System.out.println("\u001B[31m" + e.getMessage() + "\033[0m");
         }
       });
     }
-//        dumpFeed();
-//        Toolkit.getDefaultToolkit().beep();
-//        main(null);
+    service.shutdown();
     return newsList;
   }
 
-  public String getNews(String symbol) throws IOException {
+  public String getNews(String symbol, ListView<String> newsParent) throws IOException {
     String url = "https://www.benzinga.com/quote/";
     Document doc = Jsoup.connect(url + symbol)
         .timeout(10000).get();
@@ -139,15 +139,25 @@ public class ScrapeNews {
       String cleanLine = cleanLine(symbol, line);
       if (feedBucket.containsKey(symbol)
           && feedBucket.get(symbol).equals(newsDate + ",\"" + line + "\"")) {
-        System.out.println(counter + " - " + symbol + ": ");
+//        System.out.println(counter + " - " + symbol + ": ");
       } else {
         feedBucket.put(symbol, newsDate + ",\"" + line + "\"");
-        breakingNews(symbol);
+//        breakingNews(symbol);
         var dtf = DateTimeFormatter.ofPattern("MM/dd/yy h:mma");
-        out = symbol + ": " + nameSymbols.get(symbol) + " - " + newsDate.format(dtf) + " - " + line;
+        body = doc.select("div.flex.justify-between");
+        String name = "undefined";
+        if (!body.isEmpty()) {
+          name = body.last().text().substring(0, body.last().text().length() - 28);
+//          nameSymbols.put(symbol, name);
+          if (!name.equals("undefined")) {
+
+          }
+        }
+        out = symbol + ": " + name + " - " + newsDate.format(dtf) + " - " + line;
+        String finalOut = out;
       }
     } else {
-      System.out.println(counter + " - " + symbol + ": ");
+//      System.out.println(counter + " - " + symbol + ": ");
     }
     return out;
   }
@@ -169,7 +179,6 @@ public class ScrapeNews {
   }
 
   public static void dumpFeed() {
-    System.out.println("Dump Feed");
     try (var out = Files.newBufferedWriter(feedPath, StandardCharsets.UTF_8,
         StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
       for (var element : feedBucket.keySet()) {
@@ -214,7 +223,6 @@ public class ScrapeNews {
       }
       while (true) {
         if (scanner.hasNext()) {
-          System.out.println("SHUTTING DOWN SERVICE");
           service.shutdown();
           break;
         }

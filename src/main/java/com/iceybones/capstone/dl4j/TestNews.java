@@ -18,6 +18,8 @@
 package com.iceybones.capstone.dl4j;
 
 import com.iceybones.capstone.CleanNews;
+import com.iceybones.capstone.controllers.MainController;
+import com.iceybones.capstone.models.WatchlistEntry;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,7 +31,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
+import javafx.scene.control.ListView;
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -89,11 +94,15 @@ public class TestNews {
     }
   }
 
-  public static void main() throws Exception {
-    if (!Files.exists(Path.of("bought.csv"))) {
-      Files.createFile(Path.of("bought.csv"));
+  public static List<WatchlistEntry> main(ListView<String> newsParent, MainController mainController) throws Exception {
+    AtomicInteger counter = new AtomicInteger(1);
+    Platform.runLater(() -> newsParent.getItems().add("--------- Evaluating today's headlines. ---------"));
+    List<WatchlistEntry> watchlist = new ArrayList<>();
+    var ratedPath = Path.of("rated.csv");
+    if (!Files.exists(ratedPath)) {
+      Files.createFile(ratedPath);
     }
-    var bought = Files.newBufferedReader(Path.of("bought.csv")).lines()
+    var bought = Files.newBufferedReader(ratedPath).lines()
         .collect(Collectors.toList());
     tokenizerFactory = new DefaultTokenizerFactory();
     tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
@@ -106,7 +115,9 @@ public class TestNews {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    for (var element : newsMap.keySet()) {
+   final int total = newsMap.size();
+    for (var element : newsMap.keySet().stream().sorted().collect(Collectors.toList())) {
+      counter.getAndIncrement();
       var split = newsMap.get(element).split(",");
       if (LocalDateTime.parse(split[0]).toLocalDate().isEqual(LocalDateTime.now().toLocalDate())
           || (LocalDateTime.parse(split[0]).toLocalTime().isAfter(LocalTime.of(9, 30))
@@ -115,18 +126,23 @@ public class TestNews {
         if (bought.contains(element)) {
           verdicts.remove(element);
         } else {
-          System.out.println(newsMap.get(element));
           analyze(element, newsMap.get(element));
+          Platform.runLater(() -> newsParent.getItems().add(
+               counter + "/" + total + ": " + verdicts.get(element)));
         }
       }
     }
-    try (var out = Files.newBufferedWriter(Path.of("bought.csv"), StandardOpenOption.APPEND)) {
+    try (var out = Files.newBufferedWriter(Path.of("rated.csv"), StandardOpenOption.TRUNCATE_EXISTING)) {
       for (var el : verdicts.keySet()) {
-        System.out.println(verdicts.get(el));
+        var elSplit = verdicts.get(el).split(",");
+        watchlist.add(new WatchlistEntry(elSplit[1], elSplit[0]));
         out.append(verdicts.get(el));
         out.newLine();
       }
+      Platform.runLater(() -> newsParent.getItems().add("--------- Evaluation complete. ---------"));
+      mainController.finishScanTest();
     }
+    return watchlist;
   }
 
   // One news story gets transformed into a dataset with one element.
