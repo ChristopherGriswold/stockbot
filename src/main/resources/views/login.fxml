@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="360.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iceybones.capstone.controllers.LoginController">
+   <center>
+      <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="128.0" prefWidth="128.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/iceybonesLogo.png" />
+               </image>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </ImageView>
+            <TextField fx:id="apiKeyTxt" pickOnBounds="false" promptText="API Key" text="PKR4NEZQ8HCF9TIMSAL9" />
+            <PasswordField fx:id="secretKeyTxt" pickOnBounds="false" promptText="Secret Key" text="NUwap5yW590H0ZS5WR0BxcGYxJeSzkRuE45wcso2" />
+            <HBox alignment="CENTER" spacing="8.0">
+               <children>
+                  <CheckBox fx:id="paperAccountCheck" mnemonicParsing="false" selected="true" text="Paper Account" />
+                  <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#onActionLogin" text="Login" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <bottom>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <ProgressBar fx:id="loginProgress" prefHeight="12.0" prefWidth="104.0" visible="false" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
+   </bottom>
+</BorderPane>
