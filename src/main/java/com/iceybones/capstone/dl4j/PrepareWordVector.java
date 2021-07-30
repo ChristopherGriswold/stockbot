@@ -17,7 +17,10 @@
 
 package com.iceybones.capstone.dl4j;
 
+<<<<<<< HEAD
 import java.io.File;
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.deeplearning4j.text.sentenceiterator.BasicLineIterator;
@@ -28,6 +31,11 @@ import org.deeplearning4j.text.tokenization.tokenizerfactory.TokenizerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+<<<<<<< HEAD
+=======
+import java.io.File;
+
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 /**-
  * This program generates a word-vector from news items stored in resources folder.
  * News File is located in ~/dl4j-examples-data/dl4j-examples/NewsData/
@@ -43,11 +51,20 @@ public class PrepareWordVector {
 
     public static void main(String[] args) throws Exception {
 
+<<<<<<< HEAD
 //        String filePath = new File("data/news/news_processed.txt");
 
         log.info("Load & Vectorize Sentences....");
         // Strip white space before and after for each line
         SentenceIterator iter = new BasicLineIterator("data/news/news_processed.txt");
+=======
+        // Gets Path to Text file
+        String filePath = new File("stocks/news/labeled_news/all_news.txt").getAbsolutePath();
+
+        log.info("Load & Vectorize Sentences....");
+        // Strip white space before and after for each line
+        SentenceIterator iter = new BasicLineIterator(filePath);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
         // Split on white spaces in the line to get words
         TokenizerFactory t = new DefaultTokenizerFactory();
 
@@ -74,6 +91,7 @@ public class PrepareWordVector {
 
         // Write word vectors to file
         //noinspection unchecked
+<<<<<<< HEAD
 //        WordVectorSerializer.writeWordVectors(vec.lookupTable(),
 //            new File("src/main/java/com/iceybones/capstone/data/news/newsVector.txt").getAbsolutePath());
         WordVectorSerializer.writeWord2VecModel(vec, new File("data/news/newsVector.txt"));
@@ -112,4 +130,8 @@ public class PrepareWordVector {
 //        //noinspection unchecked
 //        WordVectorSerializer.writeWord2VecModel(vec, new File("src/main/java/com/iceybones/capstone/data/news/newsVector.txt").getAbsolutePath());
 //    }
+=======
+        WordVectorSerializer.writeWord2VecModel(vec, new File("stocks/news/newsVector.txt").getAbsolutePath());
+    }
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 }

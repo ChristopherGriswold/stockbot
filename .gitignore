@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 data/
 target/
 out/
+=======
+stocks/
+news/
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 *.properties

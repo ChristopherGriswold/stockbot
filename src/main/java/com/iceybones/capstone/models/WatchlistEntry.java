@@ -1,6 +1,10 @@
 package com.iceybones.capstone.models;
 
+<<<<<<< HEAD
 public class WatchlistEntry implements Comparable<WatchlistEntry>{
+=======
+public class WatchlistEntry {
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   String symbol;
   String rating;
   double value;
@@ -30,10 +34,13 @@ public class WatchlistEntry implements Comparable<WatchlistEntry>{
     return rating;
   }
 
+<<<<<<< HEAD
   public String getRatingRaw() {
     return rating;
   }
 
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   public double getValue() {
     return value;
   }
@@ -62,9 +69,12 @@ public class WatchlistEntry implements Comparable<WatchlistEntry>{
   public void setPercent(double percent) {
     this.percent = percent;
   }
+<<<<<<< HEAD
 
   @Override
   public int compareTo(WatchlistEntry o) {
     return (int) ((value * 1000) - (o.getValue() * 1000));
   }
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 }

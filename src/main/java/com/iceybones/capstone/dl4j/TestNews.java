@@ -17,15 +17,21 @@
 
 package com.iceybones.capstone.dl4j;
 
+<<<<<<< HEAD
 import com.iceybones.capstone.app.CleanNews;
 import com.iceybones.capstone.controllers.MainController;
 import com.iceybones.capstone.controllers.MainController.BuyType;
 import com.iceybones.capstone.models.AlpacaWrapper;
+=======
+import com.iceybones.capstone.CleanNews;
+import com.iceybones.capstone.controllers.MainController;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import com.iceybones.capstone.models.WatchlistEntry;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+<<<<<<< HEAD
 import java.text.DecimalFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -53,6 +59,19 @@ import net.jacobpeterson.alpaca.enums.marketdata.BarsTimeFrame;
 import net.jacobpeterson.alpaca.rest.exception.AlpacaAPIRequestException;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.bar.Bar;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.bar.BarsResponse;
+=======
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import javafx.application.Platform;
+import javafx.scene.control.ListView;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.embeddings.wordvectors.WordVectors;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
@@ -69,6 +88,7 @@ public class TestNews {
 
   private static WordVectors wordVectors;
   private static TokenizerFactory tokenizerFactory;
+<<<<<<< HEAD
   private static String dataLocalPath;
 
   static {
@@ -93,11 +113,21 @@ public class TestNews {
       loadNet();
       wordVectors = WordVectorSerializer
           .readWord2VecModel("data/news/newsVector.txt");
+=======
+  private static final String dataLocalPath = "stocks/news/";
+  public static Map<String, String> verdicts = new HashMap<>();
+  public static MultiLayerNetwork net;
+
+  static {
+    try {
+      net = MultiLayerNetwork.load(new File(dataLocalPath, "news_model.net"), true);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+<<<<<<< HEAD
   public static void loadNet() {
     if (Files.exists(Path.of(dataLocalPath, "news_model.net"))) {
       try {
@@ -110,6 +140,10 @@ public class TestNews {
 
   private static String analyze(String symbol, String rawNews, boolean test) {
     String news = CleanNews.cleanLine(rawNews, symbol, false);
+=======
+  private static void analyze(String symbol, String rawNews) {
+    String news = CleanNews.cleanLine(rawNews, symbol);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     DataSet testNews = prepareTestData(news);
     INDArray fet = testNews.getFeatures();
     INDArray predicted = net.output(fet, false);
@@ -125,13 +159,18 @@ public class TestNews {
         pos = i;
       }
     }
+<<<<<<< HEAD
     String label = "sell";
+=======
+
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     try (var cats = Files.newBufferedReader(categories)) {
       String temp;
       List<String> labels = new ArrayList<>();
       while ((temp = cats.readLine()) != null) {
         labels.add(temp);
       }
+<<<<<<< HEAD
       label = labels.get(pos).split(",")[1];
       verdicts.put(symbol, label + "," + symbol + "," + rawNews);
     } catch (Exception e) {
@@ -154,6 +193,28 @@ public class TestNews {
     }
     var rated = Files.newBufferedReader(ratedPath).lines()
         .collect(Collectors.toList());
+=======
+      String label = labels.get(pos).split(",")[1];
+      verdicts.put(symbol, label + "," + symbol + "," + rawNews);
+    } catch (Exception e) {
+      System.out.println("File Exception : " + e.getMessage());
+    }
+  }
+
+  public static List<WatchlistEntry> main(ListView<String> newsParent, MainController mainController) throws Exception {
+    AtomicInteger counter = new AtomicInteger(1);
+    Platform.runLater(() -> newsParent.getItems().add("--------- Evaluating today's headlines. ---------"));
+    List<WatchlistEntry> watchlist = new ArrayList<>();
+    var ratedPath = Path.of("rated.csv");
+    if (!Files.exists(ratedPath)) {
+      Files.createFile(ratedPath);
+    }
+    var bought = Files.newBufferedReader(ratedPath).lines()
+        .collect(Collectors.toList());
+    tokenizerFactory = new DefaultTokenizerFactory();
+    tokenizerFactory.setTokenPreProcessor(new CommonPreprocessor());
+    wordVectors = WordVectorSerializer.readWord2VecModel(new File(dataLocalPath, "newsVector.txt"));
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     Map<String, String> newsMap = new HashMap<>();
     try {
       newsMap = Files.newBufferedReader(Path.of(dataLocalPath, "feed.csv")).lines()
@@ -162,6 +223,7 @@ public class TestNews {
     } catch (IOException e) {
       e.printStackTrace();
     }
+<<<<<<< HEAD
     final int total = newsMap.size();
     for (var element : newsMap.keySet().stream().sorted().collect(Collectors.toList())) {
       if (counter.intValue() % (newsMap.size() / 50) == 1) {
@@ -174,12 +236,17 @@ public class TestNews {
 //                      "Evaluating " + symbol + ": " + finalCounter + "/" + dailyStocks.get(date).size());
             });
       }
+=======
+   final int total = newsMap.size();
+    for (var element : newsMap.keySet().stream().sorted().collect(Collectors.toList())) {
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       counter.getAndIncrement();
       var split = newsMap.get(element).split(",");
       if (LocalDateTime.parse(split[0]).toLocalDate().isEqual(LocalDateTime.now().toLocalDate())
           || (LocalDateTime.parse(split[0]).toLocalTime().isAfter(LocalTime.of(9, 30))
           && LocalDateTime.parse(split[0]).toLocalDate()
           .isAfter(LocalDateTime.now().toLocalDate().minusDays(2)))) {
+<<<<<<< HEAD
         if (rated.contains(element)) {
           verdicts.remove(element);
         } else {
@@ -191,20 +258,38 @@ public class TestNews {
     }
     try (var out = Files
         .newBufferedWriter(Path.of(dataLocalPath, "rated.csv"))) {
+=======
+        if (bought.contains(element)) {
+          verdicts.remove(element);
+        } else {
+          analyze(element, newsMap.get(element));
+          Platform.runLater(() -> newsParent.getItems().add(
+               counter + "/" + total + ": " + verdicts.get(element)));
+        }
+      }
+    }
+    try (var out = Files.newBufferedWriter(Path.of("rated.csv"), StandardOpenOption.TRUNCATE_EXISTING)) {
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       for (var el : verdicts.keySet()) {
         var elSplit = verdicts.get(el).split(",");
         watchlist.add(new WatchlistEntry(elSplit[1], elSplit[0]));
         out.append(verdicts.get(el));
         out.newLine();
       }
+<<<<<<< HEAD
       Platform
           .runLater(() -> newsParent.getItems()
               .addAll("========== Evaluation Complete ==========",
                   "============================================================="));
+=======
+      Platform.runLater(() -> newsParent.getItems().add("--------- Evaluation complete. ---------"));
+      mainController.finishScanTest();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     }
     return watchlist;
   }
 
+<<<<<<< HEAD
   // DateTime	Symbol	High/Open	Low/Open	Rua_High/Open	News
   public static void backTest(ListView<String> newsParent, MainController mainController,
       LocalDate start, LocalDate end, double initInvestment, BuyType buyType) {
@@ -587,6 +672,9 @@ public class TestNews {
     }
   }
 
+=======
+  // One news story gets transformed into a dataset with one element.
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   @SuppressWarnings("DuplicatedCode")
   private static DataSet prepareTestData(String i_news) {
     List<String> news = new ArrayList<>(1);
@@ -608,8 +696,12 @@ public class TestNews {
     }
 
     INDArray features = Nd4j.create(news.size(), wordVectors.lookupTable().layerSize(), maxLength);
+<<<<<<< HEAD
     INDArray labels = Nd4j.create(news.size(), 3,
         maxLength);    //labels: Crime, Politics, Bollywood, Business&Development
+=======
+    INDArray labels = Nd4j.create(news.size(), 4, maxLength);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     INDArray featuresMask = Nd4j.zeros(news.size(), maxLength);
     INDArray labelsMask = Nd4j.zeros(news.size(), maxLength);
 
@@ -620,11 +712,17 @@ public class TestNews {
       for (int j = 0; j < tokens.size() && j < maxLength; j++) {
         String token = tokens.get(j);
         INDArray vector = wordVectors.getWordVectorMatrix(token);
+<<<<<<< HEAD
         features.put(new INDArrayIndex[]{NDArrayIndex.point(i),
                 NDArrayIndex.all(),
                 NDArrayIndex.point(j)},
             vector);
 
+=======
+        features.put(
+            new INDArrayIndex[]{NDArrayIndex.point(i), NDArrayIndex.all(), NDArrayIndex.point(j)},
+            vector);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
         temp[1] = j;
         featuresMask.putScalar(temp, 1.0);
       }

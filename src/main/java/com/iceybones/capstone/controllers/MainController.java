@@ -1,18 +1,29 @@
 package com.iceybones.capstone.controllers;
 
+<<<<<<< HEAD
 import com.iceybones.capstone.app.CleanNews;
 import com.iceybones.capstone.app.ScrapeNews;
 import com.iceybones.capstone.dl4j.PrepareNews;
 import com.iceybones.capstone.dl4j.TestNews;
 import com.iceybones.capstone.dl4j.TrainNews;
 import com.iceybones.capstone.models.AlpacaWrapper;
+=======
+import com.iceybones.capstone.CleanNews;
+import com.iceybones.capstone.ScrapeNews;
+import com.iceybones.capstone.dl4j.PrepareNews;
+import com.iceybones.capstone.dl4j.TestNews;
+import com.iceybones.capstone.dl4j.TrainNews;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import com.iceybones.capstone.models.WatchlistEntry;
 import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+<<<<<<< HEAD
 import java.nio.file.StandardOpenOption;
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import java.text.DecimalFormat;
 import java.text.ParsePosition;
 import java.time.DayOfWeek;
@@ -24,7 +35,10 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Collections;
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +62,10 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+<<<<<<< HEAD
 import javafx.scene.control.ChoiceBox;
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
@@ -56,7 +73,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
+<<<<<<< HEAD
 import javafx.scene.control.RadioButton;
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -72,8 +92,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+<<<<<<< HEAD
 import net.jacobpeterson.abstracts.enums.SortDirection;
 import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
+=======
+import javax.tools.Tool;
+import net.jacobpeterson.abstracts.enums.SortDirection;
+import net.jacobpeterson.abstracts.websocket.exception.WebsocketException;
+import net.jacobpeterson.alpaca.AlpacaAPI;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import net.jacobpeterson.alpaca.enums.asset.AssetStatus;
 import net.jacobpeterson.alpaca.enums.marketdata.BarsTimeFrame;
 import net.jacobpeterson.alpaca.enums.order.OrderSide;
@@ -91,6 +118,10 @@ import net.jacobpeterson.domain.alpaca.asset.Asset;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.bar.BarsResponse;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.snapshot.Snapshot;
 import net.jacobpeterson.domain.alpaca.marketdata.historical.trade.Trade;
+<<<<<<< HEAD
+=======
+import net.jacobpeterson.domain.alpaca.marketdata.historical.trade.TradesResponse;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 import net.jacobpeterson.domain.alpaca.marketdata.realtime.MarketDataMessage;
 import net.jacobpeterson.domain.alpaca.marketdata.realtime.bar.BarMessage;
 import net.jacobpeterson.domain.alpaca.order.Order;
@@ -101,6 +132,7 @@ import net.jacobpeterson.domain.alpaca.streaming.trade.TradeUpdateMessage;
 
 public class MainController implements Initializable {
 
+<<<<<<< HEAD
   public enum BuyType {
     ALL_BUYS("All Buys"), STRONG_ONLY("Strong Only");
     String txt;
@@ -110,6 +142,8 @@ public class MainController implements Initializable {
     }
   }
 
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   ExecutorService service = Executors.newSingleThreadExecutor();
   ObservableList<String> scanResults;
   ObservableList<Position> positions = FXCollections.observableArrayList();
@@ -118,6 +152,7 @@ public class MainController implements Initializable {
   String watchlistId;
   BarsResponse currentBarResponse = new BarsResponse();
   Snapshot currentSnapshot = new Snapshot();
+<<<<<<< HEAD
   //  AlpacaAPI alpacaAPI = new AlpacaAPI();
   public static HashMap<String, Asset> usEquities;
   Map<String, Integer> buyMap = new HashMap<>();
@@ -125,12 +160,24 @@ public class MainController implements Initializable {
   CleanNews cleanNews = new CleanNews();
   TestNews testNews = new TestNews();
   int lineChartLimit = 50;
+=======
+  AlpacaAPI alpacaAPI = new AlpacaAPI();
+  public static HashMap<String, Asset> usEquities;
+  ScrapeNews scraper = new ScrapeNews();
+  CleanNews cleanNews = new CleanNews();
+  TestNews testNews = new TestNews();
+  int lineChartLimit = 100;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   double currentStockPrice = 0.0;
 
   {
     try {
+<<<<<<< HEAD
       usEquities = (HashMap<String, Asset>) AlpacaWrapper.getAPI()
           .getAssets(AssetStatus.ACTIVE, "us_equity")
+=======
+      usEquities = (HashMap<String, Asset>) alpacaAPI.getAssets(AssetStatus.ACTIVE, "us_equity")
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
           .stream()
           .collect(Collectors.toMap((Asset a) -> a.getSymbol(), (Asset b) -> b));
 //      usEquities.sort(Comparator.comparing(Asset::getSymbol));
@@ -141,6 +188,7 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
+<<<<<<< HEAD
     int counter = 0;
     var tryServ = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     tickerSymbolCbox.setOnHiding(e -> {
@@ -184,11 +232,17 @@ public class MainController implements Initializable {
         return null;
       }
     });
+=======
+    tickerSymbolCbox.setOnHiding(e -> {
+      onActionTicker();
+    });
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     runClock();
     updateCash();
     setupPortfolioTable();
     setupOrdersTable();
     setupWatchlistTable();
+<<<<<<< HEAD
     newsParent.getItems()
         .addAll("========== Directions ==========",
             "Step 1: Press the SCAN button to scrape today's news headlines.",
@@ -212,6 +266,11 @@ public class MainController implements Initializable {
     testNewsParent.getItems()
         .addAll("========== Directions ==========",
             "If no classification is on file, enter a Buy % and a Buy Strong % and click Classify.",
+=======
+    testNewsParent.getItems()
+        .addAll("=============================================================",
+            "Directions: If no classification is on file, enter a Buy % and a Buy Strong % and click Classify.",
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
             "Buy % is a measure of the lowest projected increase to a stock that will cause it to be considered a good buy.",
             "Likewise, Buy Strong % is a determination as to what projected increase would be considered a great buy.",
             "Example: Buy % = 5 and Buy Strong % = 10",
@@ -275,10 +334,15 @@ public class MainController implements Initializable {
     testStartDatePicker.setDayCellFactory(picker -> new DateCell() {
       public void updateItem(LocalDate date, boolean empty) {
         super.updateItem(date, empty);
+<<<<<<< HEAD
         setDisable(empty || date.compareTo(LocalDate.of(2009, 2, 11)) < 0
             || date.compareTo(LocalDate.of(2020, 6, 9)) > 0
             || date.getDayOfWeek() == DayOfWeek.SUNDAY
             || date.getDayOfWeek() == DayOfWeek.SATURDAY);
+=======
+        setDisable(empty || date.compareTo(LocalDate.of(2015, 6, 10)) < 0
+            || date.compareTo(LocalDate.of(2020, 6, 9)) > 0);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       }
     });
     testStartDatePicker.setValue(LocalDate.of(2020, 6, 1));
@@ -286,10 +350,15 @@ public class MainController implements Initializable {
     testEndDatePicker.setDayCellFactory(picker -> new DateCell() {
       public void updateItem(LocalDate date, boolean empty) {
         super.updateItem(date, empty);
+<<<<<<< HEAD
         setDisable(empty || date.compareTo(LocalDate.of(2009, 2, 11)) < 0
             || date.compareTo(LocalDate.of(2020, 6, 9)) > 0
             || date.getDayOfWeek() == DayOfWeek.SUNDAY
             || date.getDayOfWeek() == DayOfWeek.SATURDAY);
+=======
+        setDisable(empty || date.compareTo(LocalDate.of(2015, 6, 10)) < 0
+            || date.compareTo(LocalDate.of(2020, 6, 9)) > 0);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       }
     });
 
@@ -310,11 +379,22 @@ public class MainController implements Initializable {
     quantityField.setTextFormatter(new TextFormatter<>(decimalOnly));
     buyPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
     buyStrongPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+<<<<<<< HEAD
     investmentTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
     trailingSLTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
     buyLimitPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
     investmentOpTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
     trailingSLOpTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+=======
+    sellPercentTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    sellStrongPercentTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxDailyTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxBuyTestTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxBuyTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    maxDailyTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    sellPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+    sellStrongPercentTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     minibatchTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
     epochTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
     testSizeTxt.setTextFormatter(new TextFormatter<>(decimalOnly));
@@ -332,7 +412,11 @@ public class MainController implements Initializable {
     var decimalFormat = new DecimalFormat("$###,###,##0.00");
     Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
       try {
+<<<<<<< HEAD
         Account account = AlpacaWrapper.getAPI().getAccount();
+=======
+        Account account = alpacaAPI.getAccount();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
         Platform.runLater(() -> equityLbl
             .setText(decimalFormat.format(Double.parseDouble(account.getEquity()))));
         Platform.runLater(() -> buyingPowerLbl.setText(
@@ -430,6 +514,79 @@ public class MainController implements Initializable {
 
           ;
         });
+<<<<<<< HEAD
+=======
+    watchlistValueCol.setCellFactory(
+        new Callback<TableColumn<WatchlistEntry, Double>, TableCell<WatchlistEntry, Double>>() {
+          @Override
+          public TableCell<WatchlistEntry, Double> call(
+              TableColumn<WatchlistEntry, Double> watchlistEntryStringTableColumn) {
+            return new TableCell<WatchlistEntry, Double>() {
+              @Override
+              protected void updateItem(Double item, boolean empty) {
+                if (item == null) {
+                  setText(null);
+                  return;
+                }
+                DecimalFormat df = new DecimalFormat("###,##0.00");
+                setText("$" + df.format(item));
+              }
+            };
+          }
+
+          ;
+        });
+    watchlistChangeCol.setCellFactory(
+        new Callback<TableColumn<WatchlistEntry, Double>, TableCell<WatchlistEntry, Double>>() {
+          @Override
+          public TableCell<WatchlistEntry, Double> call(
+              TableColumn<WatchlistEntry, Double> watchlistEntryStringTableColumn) {
+            return new TableCell<WatchlistEntry, Double>() {
+              @Override
+              protected void updateItem(Double item, boolean empty) {
+                if (item == null) {
+                  setText(null);
+                  return;
+                }
+                if (item < 0) {
+                  setTextFill(Color.RED);
+                } else {
+                  setTextFill(Color.GREEN);
+                }
+                DecimalFormat df = new DecimalFormat("###,##0.00");
+                setText("$" + df.format(item));
+              }
+            };
+          }
+
+          ;
+        });
+    watchlistPercentCol.setCellFactory(
+        new Callback<TableColumn<WatchlistEntry, Double>, TableCell<WatchlistEntry, Double>>() {
+          @Override
+          public TableCell<WatchlistEntry, Double> call(
+              TableColumn<WatchlistEntry, Double> watchlistEntryStringTableColumn) {
+            return new TableCell<WatchlistEntry, Double>() {
+              @Override
+              protected void updateItem(Double item, boolean empty) {
+                if (item == null) {
+                  setText(null);
+                  return;
+                }
+                if (item < 0) {
+                  setTextFill(Color.RED);
+                } else {
+                  setTextFill(Color.GREEN);
+                }
+                DecimalFormat df = new DecimalFormat("###,##0.00");
+                setText(df.format(item) + "%");
+              }
+            };
+          }
+
+          ;
+        });
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     portfolioTable.setItems(positions);
     updatePortfolioTable();
   }
@@ -437,7 +594,11 @@ public class MainController implements Initializable {
   private void updatePortfolioTable() {
     Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(() -> {
       try {
+<<<<<<< HEAD
         var openPositions = AlpacaWrapper.getAPI().getOpenPositions().stream()
+=======
+        var openPositions = alpacaAPI.getOpenPositions().stream()
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
             .collect(Collectors.toMap((a) -> a.getSymbol(), (b) -> b));
         for (int i = 0; i < positions.size(); i++) {
           if (openPositions.containsKey(positions.get(i).getSymbol())) {
@@ -448,7 +609,11 @@ public class MainController implements Initializable {
           }
         }
         for (var key : openPositions.keySet()) {
+<<<<<<< HEAD
           if (!positions.contains(openPositions.get(key))) {
+=======
+          if(!positions.contains(openPositions.get(key))) {
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
             positions.add(openPositions.get(key));
           }
         }
@@ -510,9 +675,16 @@ public class MainController implements Initializable {
 
           ;
         });
+<<<<<<< HEAD
     ordersTable.setItems(orders);
     updateOrdersTable();
     try {
+=======
+    updateOrdersTable();
+    ordersTable.setItems(orders);
+    try {
+      // List to account updates and trade updates from Alpaca and print their messages out
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       AlpacaStreamListener alpacaStreamListener = new AlpacaStreamListenerAdapter(
           AlpacaStreamMessageType.ACCOUNT_UPDATES,
           AlpacaStreamMessageType.TRADE_UPDATES) {
@@ -533,7 +705,11 @@ public class MainController implements Initializable {
           }
         }
       };
+<<<<<<< HEAD
       AlpacaWrapper.getAPI().addAlpacaStreamListener(alpacaStreamListener);
+=======
+      alpacaAPI.addAlpacaStreamListener(alpacaStreamListener);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 
     } catch (WebsocketException exception) {
       exception.printStackTrace();
@@ -542,11 +718,18 @@ public class MainController implements Initializable {
 
   private void updateOrdersTable() {
     try {
+<<<<<<< HEAD
       var alpacaOrders = AlpacaWrapper.getAPI()
           .getOrders(OrderStatus.ALL, 500, ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).minusDays(30),
               ZonedDateTime.now().plusMinutes(2),
               SortDirection.DESCENDING, false, null);
       orders.setAll(alpacaOrders);
+=======
+      orders.setAll(alpacaAPI
+          .getOrders(OrderStatus.ALL, 50, ZonedDateTime.now().minusDays(30), ZonedDateTime.now(),
+              SortDirection.DESCENDING, false, null
+          ));
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     } catch (AlpacaAPIRequestException e) {
       e.printStackTrace();
     }
@@ -559,6 +742,7 @@ public class MainController implements Initializable {
     watchlistChangeCol.setCellValueFactory(new PropertyValueFactory<>("change"));
     watchlistPercentCol.setCellValueFactory(new PropertyValueFactory<>("percent"));
     watchlistValueCol.setCellValueFactory(new PropertyValueFactory<>("value"));
+<<<<<<< HEAD
     watchlistValueCol.setCellFactory(
         new Callback<TableColumn<WatchlistEntry, Double>, TableCell<WatchlistEntry, Double>>() {
           @Override
@@ -657,16 +841,50 @@ public class MainController implements Initializable {
   private void updateWatchlistTable() {
     Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate((() -> {
       priceWatchlist();
+=======
+    watchlistTable.setItems(watchlist);
+  }
+
+  private void updateWatchlistTable() {
+    Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate((() -> {
+      try {
+        var symbols = watchlist.stream().map(a -> a.getSymbol())
+            .collect(Collectors.toList());
+
+        Map<String, Snapshot> snapshots = alpacaAPI.getSnapshots(symbols);
+        for (var element : watchlist) {
+          element.setValue(snapshots.get(element.getSymbol()).getLatestTrade().getP());
+          if (snapshots.get(element.getSymbol()).getPrevDailyBar() == null
+              || snapshots.get(element.getSymbol()).getDailyBar() == null) {
+            continue;
+          }
+          element.setChange(snapshots.get(element.getSymbol()).getDailyBar().getC() - snapshots
+              .get(element.getSymbol()).getPrevDailyBar().getC());
+          element
+              .setPercent(100 * (snapshots.get(element.getSymbol()).getDailyBar().getC() / snapshots
+                  .get(element.getSymbol()).getPrevDailyBar().getC() - 1));
+        }
+      } catch (AlpacaAPIRequestException e) {
+        e.printStackTrace();
+      }
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       watchlistTable.refresh();
     }), 0, 10, TimeUnit.SECONDS);
   }
 
   private void getBars(String symbol) {
     try {
+<<<<<<< HEAD
       currentBarResponse = AlpacaWrapper.getAPI().getBars(
           symbol,
           ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).minusDays(6),
           ZonedDateTime.now().withZoneSameInstant(ZoneId.of("UTC")).plusHours(3).plusMinutes(45),
+=======
+      currentBarResponse = alpacaAPI.getBars(
+          symbol,
+          ZonedDateTime.now().minusDays(6),
+          ZonedDateTime.now().plusHours(3).plusMinutes(45),
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
           10000,
           null,
           BarsTimeFrame.MINUTE);
@@ -683,8 +901,12 @@ public class MainController implements Initializable {
     if (currentSnapshot.getPrevDailyBar() != null && currentSnapshot.getDailyBar() != null) {
       change = currentSnapshot.getDailyBar().getC() - currentSnapshot.getPrevDailyBar().getC();
       changePct =
+<<<<<<< HEAD
           100 * (currentSnapshot.getDailyBar().getC() / currentSnapshot.getPrevDailyBar().getC()
               - 1);
+=======
+          100 * (currentSnapshot.getDailyBar().getC() / currentSnapshot.getPrevDailyBar().getC() - 1);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     }
     DecimalFormat df = new DecimalFormat("###,##0.00");
     if (change < 0) {
@@ -693,9 +915,14 @@ public class MainController implements Initializable {
       quoteChange.setTextFill(Color.GREEN);
     }
     quoteChange.setText("$" + df.format(change) + " (" + df.format(changePct) + "%)");
+<<<<<<< HEAD
     if (currentBarResponse.getSymbol() == null || !currentBarResponse.getSymbol().equals(symbol)) {
       getBars(symbol);
       updateSeries(series, symbol);
+=======
+    if(currentBarResponse.getSymbol() == null || !currentBarResponse.getSymbol().equals(symbol)) {
+      getBars(symbol);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     }
     var bars = (new ArrayList<>(currentBarResponse.getBars().stream()
         .sorted((a, b) -> (int) (b.getT().toEpochSecond() - a.getT().toEpochSecond()))
@@ -704,7 +931,12 @@ public class MainController implements Initializable {
     for (var bar : bars) {
       series.getData().add(new XYChart.Data<>(bar.getT().toEpochSecond(), bar.getC()));
     }
+<<<<<<< HEAD
 //      Trade latest = AlpacaWrapper.borrowAPI().getLatestTrade(symbol).getTrade();
+=======
+    updateSeries(series, symbol);
+//      Trade latest = alpacaAPI.getLatestTrade(symbol).getTrade();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 //      series.getData().add(new XYChart.Data<>(latest.getT().toEpochSecond(), latest.getP()));
     quotePrice.setText("$" + bars.get(0).getC());
 
@@ -728,7 +960,11 @@ public class MainController implements Initializable {
                   barMessage.getClose()));
               quotePrice.setText("$" + barMessage.getClose());
               try {
+<<<<<<< HEAD
                 var snapshot = AlpacaWrapper.getAPI().getSnapshot(symbol);
+=======
+                var snapshot = alpacaAPI.getSnapshot(symbol);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
                 quoteChange.setText(
                     Double.toString(snapshot.getDailyBar().getC() - snapshot.getDailyBar().getO()));
               } catch (AlpacaAPIRequestException e) {
@@ -738,7 +974,11 @@ public class MainController implements Initializable {
           }
         }
       };
+<<<<<<< HEAD
       AlpacaWrapper.getAPI().addMarketDataStreamListener(listener);
+=======
+      alpacaAPI.addMarketDataStreamListener(listener);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     } catch (WebsocketException exception) {
       exception.printStackTrace();
     }
@@ -766,7 +1006,11 @@ public class MainController implements Initializable {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("h:mma\nMM/dd/yy");
 
         var i = Instant.ofEpochSecond(number.longValue());
+<<<<<<< HEAD
         var z = ZonedDateTime.ofInstant(i, ZoneId.systemDefault());
+=======
+        var z = ZonedDateTime.ofInstant(i, ZoneId.of("America/New_York"));
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
         return z.format(dtf);
       }
 
@@ -778,6 +1022,7 @@ public class MainController implements Initializable {
     areaChart.autosize();
   }
 
+<<<<<<< HEAD
   private void buyAll(BuyType buyType, Double maxDaily) {
     var buyList = watchlist.stream().filter((a) -> a.getRatingRaw().equals("buy")).collect(
         Collectors.toList());
@@ -810,6 +1055,15 @@ public class MainController implements Initializable {
       Trade latest = null;
       try {
         latest = AlpacaWrapper.getAPI().getLatestTrade(symbol).getTrade();
+=======
+  ScheduledExecutorService seriesUpdater = Executors.newSingleThreadScheduledExecutor();
+
+  private void updateSeries(Series series, String symbol) {
+    seriesUpdater.scheduleAtFixedRate(() -> {
+      Trade latest = null;
+      try {
+        latest = alpacaAPI.getLatestTrade(symbol).getTrade();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       } catch (AlpacaAPIRequestException e) {
         e.printStackTrace();
       }
@@ -822,13 +1076,21 @@ public class MainController implements Initializable {
   }
 
   private void backTest() {
+<<<<<<< HEAD
     automationIndicator.setVisible(true);
+=======
+
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     try (var out = Files.newBufferedWriter(Path.of("bought_checked.csv"));
         var in = Files.newBufferedReader(Path.of("bought.csv"))) {
       String line = null;
       while ((line = in.readLine()) != null) {
         var lineSplit = line.split(",");
+<<<<<<< HEAD
         var dailyBar = AlpacaWrapper.getAPI().getSnapshot(lineSplit[1]).getDailyBar();
+=======
+        var dailyBar = alpacaAPI.getSnapshot(lineSplit[1]).getDailyBar();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
         if (dailyBar != null) {
           out.write(dailyBar.getO() + "," + dailyBar.getH() + ","
               + dailyBar.getH().doubleValue() / dailyBar.getO()
@@ -842,6 +1104,7 @@ public class MainController implements Initializable {
       e.printStackTrace();
     }
     ;
+<<<<<<< HEAD
     automationIndicator.setVisible(false);
   }
 
@@ -873,10 +1136,13 @@ public class MainController implements Initializable {
     } catch (IOException e) {
       e.printStackTrace();
     }
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   }
 
   @FXML
   void onActionScanBtn(ActionEvent event) throws IOException, InterruptedException {
+<<<<<<< HEAD
     investmentOpTxt.clear();
     evaluateBtn.setDisable(true);
     if (evaluateBtn.isSelected()) {
@@ -885,6 +1151,11 @@ public class MainController implements Initializable {
     }
     automationIndicator.setVisible(true);
     if (scanBtn.isSelected()) {
+=======
+    automationIndicator.setVisible(true);
+    if (scanBtn.isSelected()) {
+//      service.submit(() -> {
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       try {
         scanResults = scraper
             .scan(newsParent, usEquities.keySet().stream().sorted().toList(), this);
@@ -893,16 +1164,33 @@ public class MainController implements Initializable {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
+<<<<<<< HEAD
     } else {
       scanBtn.setSelected(true);
       newsParent.getItems().add("Saving scan results. Please wait.");
       ScrapeNews.cancelScan();
+=======
+//        Platform.runLater(() -> automationIndicator.setVisible(false));
+//      });
+      var serv = Executors.newSingleThreadScheduledExecutor();
+      serv.scheduleAtFixedRate(() -> {
+        if (ScrapeNews.service.isTerminated()) {
+          finishScanTest();
+          serv.shutdownNow();
+
+        }
+      }, 0, 1, TimeUnit.SECONDS);
+    } else {
+      scraper.cancelScan();
+      finishScanTest();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     }
   }
 
   public void finishScanTest() {
     automationIndicator.setVisible(false);
     scanBtn.setSelected(false);
+<<<<<<< HEAD
     investmentOpTxt.clear();
     newsParent.getItems().add("=========== Scan Finished ===========");
     Toolkit.getDefaultToolkit().beep();
@@ -918,11 +1206,18 @@ public class MainController implements Initializable {
   public void finishBackTest() {
     automationIndicator.setVisible(false);
     backtestBtn.setSelected(false);
+=======
+    testBtn.setDisable(false);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     Toolkit.getDefaultToolkit().beep();
   }
 
   @FXML
+<<<<<<< HEAD
   void onActionAllowFractional(ActionEvent event) {
+=======
+  void onActionAutoAddCheck(ActionEvent event) {
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 
   }
 
@@ -958,6 +1253,7 @@ public class MainController implements Initializable {
     }
     try {
       if (quantityField.getText().contains(".")) {
+<<<<<<< HEAD
         order = AlpacaWrapper.getAPI()
             .requestNewFractionalMarketOrder(tickerSymbolCbox.getValue().getSymbol(),
                 Double.parseDouble(quantityField.getText()), orderSide);
@@ -966,6 +1262,14 @@ public class MainController implements Initializable {
             .requestNewMarketOrder(tickerSymbolCbox.getValue().getSymbol(),
                 Integer.parseInt(quantityField.getText()), orderSide,
                 OrderTimeInForce.IOC);
+=======
+        order = alpacaAPI.requestNewFractionalMarketOrder(tickerSymbolCbox.getValue().getSymbol(),
+            Double.parseDouble(quantityField.getText()), orderSide);
+      } else {
+        order = alpacaAPI.requestNewMarketOrder(tickerSymbolCbox.getValue().getSymbol(),
+            Integer.parseInt(quantityField.getText()), orderSide,
+            OrderTimeInForce.IOC);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       }
       estimatedPriceLbl.setText("Estimated Price: $0.00");
     } catch (AlpacaAPIRequestException e) {
@@ -975,6 +1279,7 @@ public class MainController implements Initializable {
       sellBtn.setSelected(false);
       quantityField.clear();
       submitBtn.setDisable(true);
+<<<<<<< HEAD
 //      updateOrdersTable();
     }
   }
@@ -1008,11 +1313,22 @@ public class MainController implements Initializable {
       ScrapeNews.cancelScan();
     }
     automationIndicator.setVisible(true);
+=======
+      updateOrdersTable();
+    }
+  }
+
+  @FXML
+  void onActionTestBtn(ActionEvent event) {
+    automationIndicator.setVisible(true);
+    testBtn.setDisable(true);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     service.submit(() -> {
       try {
         var list = TestNews.main(newsParent, this).stream()
             .filter((a) -> usEquities.keySet().contains(a.getSymbol()))
             .collect(Collectors.toList());
+<<<<<<< HEAD
 //        Platform.runLater(() -> {
         watchlist.clear();
         watchlist.addAll(list);
@@ -1027,6 +1343,14 @@ public class MainController implements Initializable {
           buyLimitPercentTxt.setDisable(false);
         }
 
+=======
+        Platform.runLater(() -> {
+          watchlist.clear();
+          watchlist.addAll(list);
+          testBtn.setDisable(false);
+        });
+        updateWatchlistTable();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -1045,7 +1369,11 @@ public class MainController implements Initializable {
     }
     try {
       currentSnapshot = null;
+<<<<<<< HEAD
       currentSnapshot = AlpacaWrapper.getAPI().getSnapshot(tickerSymbolCbox.getValue().getSymbol());
+=======
+      currentSnapshot = alpacaAPI.getSnapshot(tickerSymbolCbox.getValue().getSymbol());
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
       currentStockPrice = currentSnapshot.getLatestTrade().getP();
     } catch (AlpacaAPIRequestException e) {
       e.printStackTrace();
@@ -1098,11 +1426,14 @@ public class MainController implements Initializable {
   }
 
   @FXML
+<<<<<<< HEAD
   void onActionSellAllBtn(ActionEvent event) {
     sellAll();
   }
 
   @FXML
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   void onKeyTypedQuantityField(KeyEvent event) {
     checkSubmit();
     if (quantityField.getText().isEmpty()) {
@@ -1135,9 +1466,16 @@ public class MainController implements Initializable {
 
   private void checkBacktest() {
     backtestBtn
+<<<<<<< HEAD
         .setDisable(investmentTestTxt.getText().isEmpty()
             || testStartDatePicker.getValue() == null || testEndDatePicker.getValue() == null
             || testEndDatePicker.getValue().isBefore(testStartDatePicker.getValue()));
+=======
+        .setDisable(maxDailyTestTxt.getText().isEmpty() || maxDailyTestTxt.getText().isEmpty()
+            || sellPercentTestTxt.getText().isEmpty() || sellStrongPercentTestTxt.getText()
+            .isEmpty()
+            || testStartDatePicker.getValue() == null || testEndDatePicker.getValue() == null);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   }
 
   @FXML
@@ -1151,6 +1489,7 @@ public class MainController implements Initializable {
   }
 
   @FXML
+<<<<<<< HEAD
   void onActionDatePickerBacktest(ActionEvent event) {
     checkBacktest();
   }
@@ -1175,10 +1514,20 @@ public class MainController implements Initializable {
         Toolkit.getDefaultToolkit().beep();
       });
     });
+=======
+  void onKeyReleasedBacktest() {
+    checkBacktest();
+  }
+
+  @FXML
+  void onActionDatePickerBacktest(ActionEvent event) {
+    checkBacktest();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   }
 
 
   @FXML
+<<<<<<< HEAD
   void onActionAutoConfirmBtn(ActionEvent event) {
     automationIndicator.setVisible(true);
     autoConfirmBtn.setDisable(true);
@@ -1250,10 +1599,19 @@ public class MainController implements Initializable {
 
   @FXML
   void onActionSellCheck(ActionEvent event) {
+=======
+  void OnActionBuyCheck(ActionEvent event) {
 
   }
 
   @FXML
+  void onActionBacktestBtn(ActionEvent event) {
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
+
+  }
+
+  @FXML
+<<<<<<< HEAD
   void onKeyReleasedTrailingSL(KeyEvent event) {
     sellAllBtn.setDisable(trailingSLOpTxt.getText().isEmpty());
   }
@@ -1261,10 +1619,15 @@ public class MainController implements Initializable {
   @FXML
   void onKeyReleasedBuyLimitTxt(KeyEvent event) {
     autoConfirmBtn.setDisable(buyLimitPercentTxt.getText().isEmpty());
+=======
+  void onActionSellCheck(ActionEvent event) {
+
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   }
 
   @FXML
   void onActionClassifyBtn(ActionEvent event) {
+<<<<<<< HEAD
     testNewsParent.getItems().add("========== Starting Classification ==========");
     classifyBtn.setDisable(true);
     automationIndicator.setVisible(true);
@@ -1274,12 +1637,27 @@ public class MainController implements Initializable {
       Platform.runLater(() -> {
         testNewsParent.getItems()
             .addAll("========== Classification Complete ==========",
+=======
+    testNewsParent.getItems().add("Performing Classification");
+    classifyBtn.setDisable(true);
+    automationIndicator.setVisible(true);
+    Executors.newSingleThreadExecutor().submit(() -> {
+      int minLines = PrepareNews.classify(Double.parseDouble(buyPercentTxt.getText()) / 100 + 1,
+          Double.parseDouble(buyStrongPercentTxt.getText()) / 100 + 1);
+      Platform.runLater(() -> {
+        testNewsParent.getItems()
+            .addAll("----- Classification complete -----",
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
                 "Buy @ " + buyPercentTxt.getText() + "%",
                 "Buy Strong @ " + buyStrongPercentTxt.getText() + "%",
                 "Max test size: " + minLines,
                 "=============================================================",
+<<<<<<< HEAD
                 "========== Training ==========",
                 "You must now train your model on the classified data.",
+=======
+                "Training: You must now train your model on the classified data.",
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
                 "Enter a Minibatch size, an Epoch number and a Test Size.",
                 "Minibatch size is the number of data elements that will be analyzed during each iteration.",
                 "A minibatch size of 50 is a good place to start.",
@@ -1299,20 +1677,37 @@ public class MainController implements Initializable {
 
   @FXML
   void onActionTrainBtn(ActionEvent event) {
+<<<<<<< HEAD
     if (!trainBtn.isSelected()) {
       trainBtn.setSelected(false);
       return;
     }
+=======
+    trainBtn.setDisable(true);
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     automationIndicator.setVisible(true);
     Executors.newSingleThreadExecutor().submit(() -> {
       TrainNews.train((int) Double.parseDouble(minibatchTxt.getText()),
           (int) Double.parseDouble(epochTxt.getText()),
+<<<<<<< HEAD
           (int) Double.parseDouble(testSizeTxt.getText()), testNewsParent, this);
       Platform.runLater(() -> {
         automationIndicator.setVisible(false);
         trainBtn.setSelected(false);
       });
     });
+=======
+          (int) Double.parseDouble(testSizeTxt.getText()), testNewsParent);
+      Platform.runLater(() -> {
+        automationIndicator.setVisible(false);
+        testNewsParent.getItems().add(
+            "You now have a trained model on file and are free to backtest and use operational functions.");
+      });
+    });
+//    minibatchTxt.clear();
+//    epochTxt.clear();
+//    testSizeTxt.clear();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   }
 
   @FXML
@@ -1321,11 +1716,19 @@ public class MainController implements Initializable {
   }
 
   @FXML
+<<<<<<< HEAD
   void onActionCancelAllBtn(ActionEvent event) {
     try {
       AlpacaWrapper.getAPI().cancelAllOrders();
       updateOrdersTable();
       Toolkit.getDefaultToolkit().beep();
+=======
+  void onActionWatchBtn(ActionEvent event) {
+    try {
+      alpacaAPI.addWatchlistAsset(alpacaAPI.getWatchlists().get(0).getId(),
+          tickerSymbolCbox.getSelectionModel().getSelectedItem().getSymbol());
+      updateWatchlistTable();
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
     } catch (AlpacaAPIRequestException e) {
       e.printStackTrace();
     }
@@ -1343,7 +1746,11 @@ public class MainController implements Initializable {
 
   @FXML
   void onKeyReleasedBacktest(KeyEvent event) {
+<<<<<<< HEAD
     checkBacktest();
+=======
+
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   }
 
   @FXML
@@ -1356,6 +1763,7 @@ public class MainController implements Initializable {
     checkTrain();
   }
 
+<<<<<<< HEAD
   public ToggleButton getTrainBtn() {
     return trainBtn;
   }
@@ -1364,6 +1772,8 @@ public class MainController implements Initializable {
     return backtestBtn;
   }
 
+=======
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   @FXML
   private TableView<Position> portfolioTable;
 
@@ -1419,6 +1829,10 @@ public class MainController implements Initializable {
   @FXML
   private ToggleButton sellBtn;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
   @FXML
   private Button submitBtn;
 
@@ -1447,10 +1861,32 @@ public class MainController implements Initializable {
   private ToggleButton scanBtn;
 
   @FXML
+<<<<<<< HEAD
   private ToggleButton evaluateBtn;
 
   @FXML
   private ChoiceBox<BuyType> autoTypeChoice;
+=======
+  private Button testBtn;
+
+  @FXML
+  private CheckBox autoAddCheck;
+
+  @FXML
+  private CheckBox autoBuyCheck;
+
+  @FXML
+  private CheckBox autoSellCheck;
+
+  @FXML
+  private CheckBox allowFractionalCheck;
+
+  @FXML
+  private TextField maxBidTxt;
+
+  @FXML
+  private TextField sellLagTxt;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 
   @FXML
   private ListView<String> newsParent;
@@ -1480,6 +1916,7 @@ public class MainController implements Initializable {
   private Label estimatedPriceLbl;
 
   @FXML
+<<<<<<< HEAD
   private TextField investmentTestTxt;
 
   @FXML
@@ -1493,6 +1930,18 @@ public class MainController implements Initializable {
 
   @FXML
   private TextField trailingSLTestTxt;
+=======
+  private TextField maxBuyTxt;
+
+  @FXML
+  private TextField maxDailyTxt;
+
+  @FXML
+  private TextField sellPercentTxt;
+
+  @FXML
+  private TextField sellStrongPercentTxt;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 
   @FXML
   private CheckBox autoWatchCheck;
@@ -1516,6 +1965,7 @@ public class MainController implements Initializable {
   private TextField testSizeTxt;
 
   @FXML
+<<<<<<< HEAD
   private ToggleButton trainBtn;
 
   @FXML
@@ -1526,6 +1976,15 @@ public class MainController implements Initializable {
 
   @FXML
   private TextField buyLimitPercentTxt;
+=======
+  private Button trainBtn;
+
+  @FXML
+  private TextField maxBuyTestTxt;
+
+  @FXML
+  private TextField maxDailyTestTxt;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 
   @FXML
   private TextField sellPercentTestTxt;
@@ -1540,6 +1999,7 @@ public class MainController implements Initializable {
   private DatePicker testEndDatePicker;
 
   @FXML
+<<<<<<< HEAD
   private ToggleButton backtestBtn;
 
   @FXML
@@ -1547,6 +2007,9 @@ public class MainController implements Initializable {
 
   @FXML
   private RadioButton fullRadioBtn;
+=======
+  private Button backtestBtn;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 
   @FXML
   private ListView<String> testNewsParent;
@@ -1555,7 +2018,11 @@ public class MainController implements Initializable {
   private ProgressIndicator automationIndicator;
 
   @FXML
+<<<<<<< HEAD
   private Button autoConfirmBtn;
+=======
+  private Button watchBtn;
+>>>>>>> 9ef15b5c9753d2e1f4a7087e8214b12a6689fba4
 
   @FXML
   private Slider chartScale;

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.iceybones.capstone.controllers.MainController">
+   <right>
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" BorderPane.alignment="CENTER">
+        <items>
+            <VBox alignment="TOP_CENTER">
+               <children>
+                  <Label text="Portfolio">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="8.0" top="8.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="portfolioTable" minHeight="0.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+                     <columns>
+                        <TableColumn fx:id="portfolioSymbolCol" editable="false" minWidth="32.0" prefWidth="70.0" style="-fx-alignment: CENTER; -fx-font-weight: BOLD;" text="Symbol" />
+                        <TableColumn fx:id="portfolioPositionCol" editable="false" minWidth="32.0" prefWidth="40.0" style="-fx-alignment: CENTER;" text="Pos" />
+                        <TableColumn fx:id="portfolioValueCol" editable="false" minWidth="32.0" prefWidth="90.0" style="-fx-alignment: CENTER;" text="Val" />
+                        <TableColumn fx:id="portfolioPandLCol" editable="false" minWidth="32.0" style="-fx-alignment: CENTER;" text="P&amp;L" />
+                        <TableColumn fx:id="portfolioPercentCol" editable="false" minWidth="32.0" style="-fx-alignment: CENTER;" text="\%" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER">
+               <children>
+                  <Label text="Watchlist">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="8.0" top="8.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="watchlistTable" maxHeight="1.7976931348623157E308" minHeight="0.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">
+                     <columns>
+                        <TableColumn fx:id="watchlistSymbolCol" prefWidth="70.0" style="-fx-alignment: CENTER; -fx-font-weight: BOLD;" text="Symbol" />
+                        <TableColumn fx:id="watchlistRatingCol" prefWidth="40.0" style="-fx-alignment: CENTER;" text="Rtg" />
+                        <TableColumn fx:id="watchlistValueCol" prefWidth="90.0" style="-fx-alignment: CENTER;" text="Val" />
+                        <TableColumn fx:id="watchlistChangeCol" style="-fx-alignment: CENTER;" text="Change" />
+                        <TableColumn fx:id="watchlistPercentCol" style="-fx-alignment: CENTER;" text="\%" />
+                     </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </VBox>
+        </items>
+      </SplitPane>
+   </right>
+   <center>
+      <SplitPane dividerPositions="0.3883357041251778, 0.44950213371266" orientation="VERTICAL" BorderPane.alignment="CENTER">
+         <items>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <HBox spacing="8.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <ComboBox fx:id="tickerSymbolCbox" editable="true" maxWidth="150.0" nodeOrientation="LEFT_TO_RIGHT" onAction="#onActionTickerSymbolCbox" onKeyReleased="#onKeyReleasedTickerSymbolCbox" prefWidth="150.0" promptText="Symbol/Name" />
+                              <Slider fx:id="chartScale" blockIncrement="200.0" majorTickUnit="200.0" max="2050.0" min="50.0" minorTickCount="0" nodeOrientation="RIGHT_TO_LEFT" onMouseReleased="#onMouseReleasedChartScale" scaleY="1.5" snapToTicks="true" value="50.0" HBox.hgrow="ALWAYS" />
+                              <Label fx:id="quotePrice">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="quoteChange" textFill="#0fc30c">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets left="16.0" right="16.0" top="16.0" />
+                           </HBox.margin>
+                        </HBox>
+                     </children>
+                  </HBox>
+                  <AreaChart fx:id="areaChart" alternativeColumnFillVisible="true" legendVisible="false" title="AAPL" VBox.vgrow="ALWAYS">
+                    <xAxis>
+                      <NumberAxis animated="false" forceZeroInRange="false" side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis animated="false" forceZeroInRange="false" side="RIGHT" />
+                    </yAxis>
+                  </AreaChart>
+                  <HBox alignment="CENTER" spacing="16.0" VBox.vgrow="NEVER">
+                     <children>
+                        <ToggleButton fx:id="buyBtn" disable="true" mnemonicParsing="false" onAction="#onActionBuyBtn" text="Buy">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="buySellGroup" />
+                           </toggleGroup>
+                        </ToggleButton>
+                        <ToggleButton fx:id="sellBtn" disable="true" mnemonicParsing="false" onAction="#onActionSellBtn" text="Sell" toggleGroup="$buySellGroup" />
+                        <TextField fx:id="quantityField" disable="true" onKeyTyped="#onKeyTypedQuantityField" promptText="Quantity" />
+                        <Label fx:id="estimatedPriceLbl" maxWidth="200.0" text="Estimated Price: $0.00" wrapText="true" HBox.hgrow="NEVER" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="8.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox alignment="TOP_CENTER" spacing="16.0">
+                     <VBox.margin>
+                        <Insets bottom="16.0" top="8.0" />
+                     </VBox.margin>
+                     <children>
+                        <Button fx:id="submitBtn" disable="true" mnemonicParsing="false" onAction="#onActionSubmitBtn" text="Submit" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" prefWidth="757.0">
+               <children>
+                  <Label text="Orders">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="8.0" top="8.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="ordersTable" minHeight="0.0">
+                    <columns>
+                        <TableColumn fx:id="ordersSymbolCol" prefWidth="59.0" style="-fx-alignment: CENTER; -fx-font-weight: BOLD;" text="Symbol" />
+                        <TableColumn fx:id="ordersOrderCol" prefWidth="34.0" style="-fx-alignment: CENTER;" text="Order" />
+                        <TableColumn fx:id="ordersSharesCol" prefWidth="59.0" style="-fx-alignment: CENTER;" text="Shares" />
+                      <TableColumn fx:id="ordersPricePerShareCol" prefWidth="51.0" style="-fx-alignment: CENTER;" text="Price per share" />
+                        <TableColumn fx:id="ordersAmountCol" prefWidth="59.0" style="-fx-alignment: CENTER;" text="Amount" />
+                        <TableColumn fx:id="ordersStatusCol" prefWidth="59.0" style="-fx-alignment: CENTER;" text="Status" />
+                    </columns>
+                     <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                     </columnResizePolicy>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" nodeOrientation="LEFT_TO_RIGHT">
+               <children>
+                  <AnchorPane>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <children>
+                        <Label alignment="CENTER" text="Automation" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="8.0" top="8.0" />
+                           </padding>
+                        </Label>
+                        <ProgressIndicator fx:id="automationIndicator" prefHeight="24.0" prefWidth="24.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                  <TabPane side="LEFT" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                     <Tab text="Operation">
+                        <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="16.0" prefHeight="345.0" prefWidth="38.0">
+                           <children>
+                              <Separator prefWidth="200.0" />
+                              <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0">
+                                 <children>
+                                    <TextField fx:id="maxBuyTxt" promptText="Max Buy" />
+                                    <TextField fx:id="maxDailyTxt" promptText="Max Daily" />
+                                    <TextField fx:id="sellPercentTxt" promptText="Sell %" />
+                                    <TextField fx:id="sellStrongPercentTxt" promptText="Sell Strong %" />
+                                    <ToggleButton fx:id="scanBtn" minWidth="50.0" mnemonicParsing="false" onAction="#onActionScanBtn" text="Scan" />
+                                 </children>
+                                 <padding>
+                                    <Insets left="8.0" right="8.0" top="8.0" />
+                                 </padding>
+                              </HBox>
+                              <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <CheckBox fx:id="autoWatchCheck" mnemonicParsing="false" onAction="#onActionWatchCheck" selected="true" text="Auto-Watch" />
+                                    <CheckBox fx:id="autoBuyCheck" mnemonicParsing="false" onAction="#OnActionBuyCheck" text="Auto-Buy" />
+                                    <CheckBox fx:id="autoSellCheck" mnemonicParsing="false" onAction="#onActionSellCheck" text="Auto-Sell" />
+                                    <Button fx:id="testBtn" mnemonicParsing="false" onAction="#onActionTestBtn" text="Test" />
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                 </padding>
+                              </HBox>
+                              <ListView fx:id="newsParent" prefHeight="281.0" prefWidth="480.0" VBox.vgrow="ALWAYS" />
+                           </children>
+                        </VBox>
+                     </Tab>
+                     <Tab text="Testing">
+                        <SplitPane dividerPositions="0.5">
+                           <items>
+                              <ListView fx:id="testNewsParent" prefHeight="347.0" prefWidth="628.0" />
+                              <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="16.0">
+                                 <children>
+                                    <Separator prefWidth="200.0" />
+                                    <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="buyPercentTxt" onKeyReleased="#onKeyReleasedClassify" promptText="Buy %" />
+                                                <TextField fx:id="buyStrongPercentTxt" onKeyReleased="#onKeyReleasedClassify" promptText="Buy Strong %" />
+                                                <Button fx:id="classifyBtn" disable="true" minWidth="69.0" mnemonicParsing="false" onAction="#onActionClassifyBtn" text="Classify" />
+                                             </children>
+                                          </VBox>
+                                          <VBox spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="minibatchTxt" onKeyReleased="#onKeyReleasedTrain" promptText="Minibatch" />
+                                                <TextField fx:id="epochTxt" onKeyReleased="#onKeyReleasedTrain" promptText="Epoch" />
+                                                <TextField fx:id="testSizeTxt" onKeyReleased="#onKeyReleasedTrain" promptText="Test Size" />
+                                                <HBox spacing="16.0">
+                                                   <children>
+                                                      <Button fx:id="trainBtn" disable="true" minWidth="60.0" mnemonicParsing="false" onAction="#onActionTrainBtn" text="Train" />
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <Separator prefWidth="200.0" />
+                                    <Separator prefWidth="200.0" />
+                                    <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <VBox spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="maxBuyTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Max Buy" />
+                                                <TextField fx:id="maxDailyTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Max Daily" />
+                                             </children>
+                                          </VBox>
+                                          <VBox spacing="4.0">
+                                             <children>
+                                                <TextField fx:id="sellPercentTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Sell %" />
+                                                <TextField fx:id="sellStrongPercentTestTxt" onKeyReleased="#onKeyReleasedBacktest" promptText="Sell Strong %" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                                       </padding>
+                                    </HBox>
+                                    <VBox alignment="TOP_CENTER" VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <HBox alignment="TOP_CENTER" fillHeight="false" spacing="8.0">
+                                             <children>
+                                                <DatePicker fx:id="testStartDatePicker" editable="false" onAction="#onActionDatePickerBacktest" promptText="Start" />
+                                                <DatePicker fx:id="testEndDatePicker" editable="false" onAction="#onActionDatePickerBacktest" promptText="End" />
+                                                <Button fx:id="backtestBtn" disable="true" minWidth="75.0" mnemonicParsing="false" onAction="#onActionBacktestBtn" text="Backtest" />
+                                             </children>
+                                             <padding>
+                                                <Insets bottom="8.0" left="8.0" right="8.0" />
+                                             </padding>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </VBox>
+                           </items>
+                        </SplitPane>
+                     </Tab>
+                  </TabPane>
+               </children>
+            </VBox>
+         </items>
+      </SplitPane>
+   </center>
+   <top>
+      <HBox nodeOrientation="LEFT_TO_RIGHT" BorderPane.alignment="CENTER">
+         <children>
+            <AnchorPane HBox.hgrow="ALWAYS">
+               <children>
+                  <VBox>
+                     <children>
+                        <HBox alignment="BASELINE_LEFT" spacing="8.0">
+                           <children>
+                              <Label fx:id="equityLbl" text="\$100,000.00">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" text="Equity">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Label>
+                              <Label fx:id="dailyProfitLbl" alignment="CENTER" text="+$13.27 (0.03%)" textFill="#17b93a">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="BASELINE_LEFT" spacing="8.0">
+                           <children>
+                              <Label fx:id="buyingPowerLbl" text="\$400,000.00">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                              <Label text="Buying Power">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="8.0" left="8.0" top="8.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="NEVER">
+               <children>
+                  <Label fx:id="clockLbl" text="12:00:00" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font size="28.0" />
+                     </font>
+                  </Label>
+               </children>
+               <HBox.margin>
+                  <Insets right="16.0" />
+               </HBox.margin>
+            </AnchorPane>
+         </children>
+      </HBox>
+   </top>
+</BorderPane>
