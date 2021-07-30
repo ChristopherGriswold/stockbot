@@ -1,14 +1,14 @@
 # StockBot V1
 ## Installation Guide
 
-## Prerequisites:
-• Java 16
-• Alpaca Markets brokerage account https://app.alpaca.markets/signup (Optional) – A paper trading account is provided.
-## Windows:
+#### Prerequisites:
+1) Java 16.
+2) Alpaca Markets brokerage account https://app.alpaca.markets/signup (Optional) – A paper trading account is provided.
+###### Windows:
 1) Unzip data.zip in a folder alongside launcher_win.jar.
 2) With Java 16 installed, simply double click on launcher_win.jar to run the application.
 3) Press the login button to continue with the provided paper trading account OR enter your account details provided by Alpaca Markets.
-## Linux
+###### Linux
 1) Unzip data.zip in a folder alongside launcher_lin.jar.
 2) With Java 16 installed, open a terminal at the current directory and run the command "java -jar launcher_lin.jar".
 3) Press login button to continue with the provided paper trading account OR enter your account details provided by Alpaca Markets.
